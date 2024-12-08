@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Movie Recommendations</h2>
+
+    {% if recommendation %}
+        <ul>
+        {% for movie in recommendation %}
+            <li>{{ movie }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No preferences yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}">Back to Home</a>
+{% endblock %}

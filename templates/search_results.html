@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Search Results for "{{ search_term }}"</h2>
+    {% if movies %}
+        <ul>
+        {% for movie in movies %}
+            <li>
+                
+                <a href="{{ url_for('add_movie', movie_id=movie.id) }}">{{ movie.title }}  </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No movies found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}">Back to Home</a>
+{% endblock %}

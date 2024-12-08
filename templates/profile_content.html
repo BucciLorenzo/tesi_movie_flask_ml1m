@@ -1,0 +1,20 @@
+{% block content %}
+
+    {% if profile %} 
+
+        {% if profile.movies %}
+            <ul>
+                {% for movie in profile.movies %}
+                <li>{{ movie.title }}</li>
+                {% endfor %}
+            </ul>
+            <button id="clear-profile-btn">Reset Profilo</button>
+        {% else %}
+            <p>Nessun film ancora aggiunto</p>
+        {% endif %}
+
+    {% else %}
+        <p>Nessun film ancora aggiunto</p>
+    {% endif %}
+
+{% endblock %}

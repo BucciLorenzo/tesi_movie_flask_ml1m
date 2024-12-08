@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ profile.username }}'s Profile</h2>
+
+    <h3>Saved Movies</h3>
+    {% if profile.movies %}
+        <ul>
+        {% for movie in profile.movies %}
+            <li>{{ movie.title }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun film ancora aggiunto</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}">Back to Home</a>
+{% endblock %}

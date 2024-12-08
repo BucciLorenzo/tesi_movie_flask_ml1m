@@ -1,0 +1,203 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+h2 {
+    color: #333;
+}
+
+/* Flexbox layout */
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Search section */
+.search-container {
+    flex: 1;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px; 
+    
+}
+
+.search-container input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#search-results {
+    overflow-y: auto;
+    max-height: 300px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    border-radius: 5px;
+}
+
+#search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background-color: #f1f1f1;
+}
+
+#search-results a {
+    color: #305073;
+    text-decoration: none;
+}
+
+#search-results a:hover {
+    text-decoration: underline;
+}
+
+/* Profile section */
+.profile-container {
+    flex: 1;
+    padding: 20px;
+    margin-left: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container h2 {
+    text-align: center;
+}
+
+/* Update profile list items to match recommendation style */
+.profile-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-container li {
+    padding: 15px; /* Increase padding for a better card feel */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background for each profile item */
+    margin-bottom: 10px; /* Space between items */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+    cursor: pointer; /* Pointer cursor for better interactivity */
+}
+
+.profile-container li:hover {
+    background-color: #e0e0e0; /* Change background on hover */
+}
+
+/* Maintain button styles */
+.profile-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff6b6b;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.profile-container button:hover {
+    background-color: #ff4c4c;
+}
+
+
+
+/* Flexbox layout for the two recommendation sections */
+.container_lists {
+    display: flex;
+    flex-direction: row;
+    gap: 20px; /* Adjust space between the two divs as needed */
+}
+
+#recommendations-1-section,
+#recommendations-2-section {
+    flex: 1; /* Allow both sections to take up equal space */
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+/* Remove floats */
+.div_search,
+.div_profile {
+  flex: 1; /* Let these divs also follow the flexbox layout */
+}
+
+/* Styling for the list items */
+#recommendations-1-section ul,
+#recommendations-2-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+#recommendations-1-section li,
+#recommendations-2-section li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#recommendations-1-section li:last-child,
+#recommendations-2-section li:last-child {
+    border-bottom: none;
+}
+
+/* Clear float code is no longer needed */
+/* Buttons */
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Clear profile button */
+#clear-profile-btn {
+    background-color: #ff6b6b;
+}
+
+#clear-profile-btn:hover {
+    background-color: #ff4c4c;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .profile-container {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}

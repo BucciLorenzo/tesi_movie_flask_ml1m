@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie4You</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_new.css') }}">
+
+
+</head>
+<body>
+    <header>
+        <h1>Filmando</h1>
+        <img src="static/logo_swap.png" style="max-width: 120px; max-height: 60px; width: auto; height: auto;">
+    </header>
+
+    <main>
+        <div class="container" style="max-height: 1200px; overflow-y: auto;">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer style="position: relative;">
+        <p>&copy; <a href="https://giuspillo.github.io">Giuseppe Spillo</a> (le parti belle e funzionanti) & ChatGPT (le parti brutte e non funzionanti)</p>
+    </footer>
+</body>
+</html>
