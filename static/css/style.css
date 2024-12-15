@@ -15,8 +15,7 @@ h2 {
 /* Flexbox layout */
 .container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column; /* Colonna principale */
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
@@ -27,8 +26,7 @@ h2 {
     flex: 1;
     padding: 15px;
     background-color: #fff;
-    border-radius: 10px; 
-    
+    border-radius: 10px;
 }
 
 .search-container input[type="text"] {
@@ -77,7 +75,7 @@ h2 {
 .profile-container {
     flex: 1;
     padding: 20px;
-    margin-left: 20px;
+    margin-top: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -95,16 +93,16 @@ h2 {
 }
 
 .profile-container li {
-    padding: 15px; /* Increase padding for a better card feel */
-    border-radius: 5px; /* Rounded corners */
-    background-color: #f9f9f9; /* Light background for each profile item */
-    margin-bottom: 10px; /* Space between items */
-    transition: background-color 0.3s ease; /* Smooth background transition */
-    cursor: pointer; /* Pointer cursor for better interactivity */
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 .profile-container li:hover {
-    background-color: #e0e0e0; /* Change background on hover */
+    background-color: #e0e0e0;
 }
 
 /* Maintain button styles */
@@ -123,27 +121,23 @@ h2 {
     background-color: #ff4c4c;
 }
 
-
-
-/* Flexbox layout for the two recommendation sections */
+/* Container for recommendations - horizontal layout */
 .container_lists {
     display: flex;
-    flex-direction: row;
-    gap: 20px; /* Adjust space between the two divs as needed */
+    flex-direction: row; /* Mantiene la disposizione orizzontale */
+    gap: 20px; /* Spazio tra le liste */
+    margin-top: 20px; /* Distanzia dalla barra di ricerca */
+    justify-content: space-between; /* Distribuisce le liste in modo uniforme */
 }
 
+/* Recommendation sections */
 #recommendations-1-section,
 #recommendations-2-section {
-    flex: 1; /* Allow both sections to take up equal space */
+    flex: 1; /* Ogni lista occupa lo stesso spazio */
     border: 1px solid #ddd;
-    margin-top: 20px;
     padding: 10px;
-}
-
-/* Remove floats */
-.div_search,
-.div_profile {
-  flex: 1; /* Let these divs also follow the flexbox layout */
+    border-radius: 5px;
+    background-color: #fff;
 }
 
 /* Styling for the list items */
@@ -164,7 +158,6 @@ h2 {
     border-bottom: none;
 }
 
-/* Clear float code is no longer needed */
 /* Buttons */
 button {
     background-color: #007bff;
@@ -194,6 +187,10 @@ button:hover {
 @media screen and (max-width: 768px) {
     .container {
         flex-direction: column;
+    }
+
+    .container_lists {
+        flex-direction: column; /* Disposizione verticale su schermi piccoli */
     }
 
     .profile-container {

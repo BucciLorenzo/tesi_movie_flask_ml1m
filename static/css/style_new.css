@@ -67,105 +67,7 @@ main {
     padding: 20px;
 }
 
-/* .search-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.search-container input[type="text"] {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border 0.3s;
-}
-
-.search-container input[type="text"]:focus {
-    border-color: #1e88e5;
-    outline: none;
-}
-
-.search-results ul {
-    list-style: none;
-    padding: 0;
-} 
-    
-.search-results li {
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.search-results li:hover {
-    background-color: #f1f1f1;
-}
-
-.search-results a {
-    color: #1e88e5;
-    text-decoration: none;
-}
-
-.search-results a:hover {
-    text-decoration: underline;
-} */
-
 /* Profile and Recommendations Panel */
-/* .profile, .recommendations {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.profile h2, .recommendations h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.profile ul, .recommendations ul {
-    list-style: none;
-    padding: 0;
-}
-
-.profile ul li, .recommendations ul li {
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.profile ul li:hover, .recommendations ul li:hover {
-    background-color: #f1f1f1;
-} */
-
-/* Recommendation section */
-#profile-section {
-    margin-top: 20px;
-}
-
-#profile-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-#profile-section li {
-    padding: 10px;
-    border-bottom: none;
-}
-
-#profile-section li:last-child {
-    border-bottom: none;
-}
-
 .profile-container ul {
     list-style: none;
     padding: 0;
@@ -241,19 +143,12 @@ footer {
     }
 }
 
-
-
-
-
-
-
 /* Search section */
 .search-container {
     flex: 2;
     padding: 15px;
     background-color: #fff;
     border-radius: 10px; 
-    
 }
 
 .search-container input[type="text"] {
@@ -264,25 +159,6 @@ footer {
     margin-bottom: 10px;
     box-sizing: border-box;
 }
-
-
-
-/* .search-container {
-    flex: 2;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 10px; 
-    
-}
-
-.search-container input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-} */
 
 #search-results {
     overflow-y: auto;
@@ -297,7 +173,6 @@ footer {
     width: 100%;
     border-radius: 5px;
 }
-
 
 #search-results li {
     padding: 10px;
@@ -319,46 +194,61 @@ footer {
 }
 
 
-/* Recommendation section */
-#recommendations-section {
-    margin-top: 20px;
-}
 
-#recommendations-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-#recommendations-section li {
+/* Stile per ciascun contenitore */
+#recommendations-1-section,
+#recommendations-2-section,
+#recommendations-3-section,
+#recommendations-4-section,
+#recommendations-5-section,
+#recommendations-6-section,
+#recommendations-7-section {
+    display: flex; /* Disposizione orizzontale degli elementi all'interno */
+    flex-wrap: wrap; /* Permette agli elementi di andare a capo */
+    gap: 10px; /* Spazio tra gli elementi */
+    border: 1px solid #ddd;
     padding: 10px;
-    border-bottom: none;
-}
-
-#recommendations-section li:last-child {
-    border-bottom: none;
-}
-
-/* Buttons */
-button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
+    background-color: #fff;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* Stile per gli elementi delle liste */
+#recommendations-1-section ul,
+#recommendations-2-section ul,
+#recommendations-3-section ul,
+#recommendations-4-section ul,
+#recommendations-5-section ul,
+#recommendations-6-section ul,
+#recommendations-7-section ul {
+    list-style: none;
+    display: flex; /* Disposizione orizzontale degli elementi */
+    gap: 10px;
+    padding: 0;
+    margin: 0;
 }
 
-/* Clear profile button */
-#clear-profile-btn {
-    background-color: #ff6b6b;
+/* Stile per gli elementi */
+#recommendations-1-section li,
+#recommendations-2-section li,
+#recommendations-3-section li,
+#recommendations-4-section li,
+#recommendations-5-section li,
+#recommendations-6-section li,
+#recommendations-7-section li {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s ease;
 }
 
-#clear-profile-btn:hover {
-    background-color: #ff4c4c;
+/* Effetto hover per gli elementi */
+#recommendations-1-section li:hover,
+#recommendations-2-section li:hover,
+#recommendations-3-section li:hover,
+#recommendations-4-section li:hover,
+#recommendations-5-section li:hover,
+#recommendations-6-section li:hover,
+#recommendations-7-seciton li:hover{
+    background-color: #e0e0e0;
 }
