@@ -222,6 +222,7 @@ footer {
 #recommendations-7-section ul {
     list-style: none;
     display: flex; /* Disposizione orizzontale degli elementi */
+    flex-wrap: wrap;
     gap: 10px;
     padding: 0;
     margin: 0;
@@ -236,6 +237,9 @@ footer {
 #recommendations-6-section li,
 #recommendations-7-section li {
     padding: 10px;
+    display: flex;
+    flex-direction: column; /* Titolo sotto l'immagine */
+    align-items: center; /* Centra orizzontalmente */
     background-color: #f9f9f9;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -252,3 +256,11 @@ footer {
 #recommendations-7-seciton li:hover{
     background-color: #e0e0e0;
 }
+
+.movie-list li a.movie-title {
+    margin-top: 15px; /* Distanza maggiore dall'immagine */
+    display: block; /* Assicura che il titolo occupi tutta la larghezza */
+    text-align: center; /* Centra il titolo sotto l'immagine */
+}
+
+

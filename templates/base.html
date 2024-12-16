@@ -5,23 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie4You</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_new.css') }}">
+    <style>
+        /* Impostazioni per il body e il layout flex */
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 90vh; /* Imposta l'altezza totale della finestra */
+            margin: 0; /* Rimuove margini predefiniti */
+            padding: 10 px;
+        }
 
+        main {
+            flex-grow: 1; /* Permette a main di occupare lo spazio disponibile */
+            overflow-y: auto; /* Abilita lo scorrimento verticale se necessario */
+            
+        }
 
+        footer {
+            text-align: center;
+            padding: 10px; /* Riduci il padding per rendere il footer più sottile */
+            font-size: 12px; /* Puoi ridurre la dimensione del font se vuoi che il testo sia più piccolo */
+            color: white; /* Colore del testo del footer */
+            margin-top: 90px; /* Puoi mantenere o modificare questo margine */
+        }
+
+    </style>
 </head>
 <body>
     <header>
         <h1>Filmando</h1>
-        <img src="static/logo_swap.png" style="max-width: 120px; max-height: 60px; width: auto; height: auto;">
+        <img src="static/logo_swap.png" style="max-width: 100px; max-height: 40px; width: auto; height: auto;">
     </header>
 
     <main>
-        <div class="container" style="max-height: 1200px; overflow-y: auto;">
+        <div class="container">
             {% block content %}{% endblock %}
         </div>
     </main>
 
-    <footer style="position: relative;">
-        <p>&copy; Lorenzo Bucci</a></p>
+    <footer>
+        <p>&copy; Lorenzo Bucci</p>
     </footer>
 </body>
 </html>
+
+
+
+
