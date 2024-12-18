@@ -7,19 +7,23 @@ body, html {
     color: #333;
     height: 100%;
     box-sizing: border-box;
+    padding-bottom: 40px; /* Aggiungi padding inferiore per lo spazio sopra il footer fisso */
 }
 
-/* Layout */
+/* Contenitore principale */
 .container {
     display: grid;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr 280px; /* Colonna sinistra flessibile, destra fissa */
     grid-gap: 20px;
-    max-width: 1200px;
-    margin: 20px auto;
+    max-width: 1200px; /* Imposta una larghezza massima */
+    width: 100%; /* Assicurati che il contenitore si adatti alla larghezza disponibile */
+    margin: 20px auto; /* Centra il contenitore con margini uguali su entrambi i lati */
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Include padding e border nella larghezza complessiva */
+    overflow-x: hidden; /* Evita contenuti fuori schermo */
 }
 
 /* Responsive for smaller screens */
@@ -36,35 +40,70 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px 20px; /* Aggiungi padding per distanziare i contenuti dai bordi */
     background-color: #1e88e5;
     color: white;
 }
 
-header h1 {
-    font-size: 24px;
-    margin: 0;
-    font-weight: 400;
-}
-
-header nav {
-    display: flex;
-    gap: 15px;
+header img {
+    max-width: 70px;
+    max-height: 40px;
+    margin-right: 10px; /* Aggiungi uno spazio tra l'immagine e il testo */
 }
 
 header nav a {
     color: white;
     text-decoration: none;
-    font-size: 16px;
+    margin-left: 15px; /* Aggiungi uno spazio tra i link di navigazione */
 }
 
 header nav a:hover {
     text-decoration: underline;
 }
 
+
 /* Main Content Styles */
 main {
-    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto; /* Solo scroll verticale */
+    padding: 5px 20px;
+    margin: 0 5px; /* Consistente con layout */
+    box-sizing: border-box;
+    padding-bottom: 40px; /* Aggiungi padding inferiore al contenuto */
+    margin-bottom: 60px;
+}
+
+main .container {
+    width: 100%; /* Assicura che il contenitore occupi sempre la larghezza disponibile */
+    min-width: 100%;
+    display: inline-block;
+}
+
+/* Footer */
+footer {
+    position: relative; /* Rimuove il footer fisso */
+    bottom: 0;
+    width: 100%;
+    padding: 10px 20px; /* Aggiunge spazio all'interno del footer */
+    box-sizing: border-box;
+    background-color: #333; /* Colore di sfondo */
+    color: white; /* Colore del testo */
+    text-align: center;
+    margin-top: 20px; /* Spazio sopra il footer */
+}
+
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    footer {
+        position: static;
+        padding: 10px; /* Riduci il padding sui dispositivi mobili */
+    }
+
+    /* Rimuovi padding inferiore extra sui dispositivi mobili */
+    body, main {
+        padding-bottom: 10px;
+    }
 }
 
 /* Profile and Recommendations Panel */
@@ -124,24 +163,16 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* Footer */
+/* Stile per il footer fisso */
 footer {
-    text-align: center;
-    padding: 20px;
     background-color: #1e88e5;
     color: white;
+    text-align: center;
+    padding: 1px;
     position: fixed;
-    width: 100%;
     bottom: 0;
-}
-
-/* Responsive Footer */
-@media (max-width: 768px) {
-    footer {
-        position: static;
-        padding: 10px;
-    }
-}
+    width: 100%;
+  }
 
 /* Search section */
 .search-container {
@@ -193,8 +224,6 @@ footer {
     text-decoration: underline;
 }
 
-
-
 /* Stile per ciascun contenitore */
 #recommendations-1-section,
 #recommendations-2-section,
@@ -204,15 +233,19 @@ footer {
 #recommendations-6-section,
 #recommendations-7-section {
     display: flex; /* Disposizione orizzontale degli elementi all'interno */
-    flex-wrap: wrap; /* Permette agli elementi di andare a capo */
+    flex-wrap: nowrap; /* Impedisce agli elementi di andare a capo */
     gap: 10px; /* Spazio tra gli elementi */
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
+    overflow-x: auto; /* Abilita lo scorrimento orizzontale se necessario */
+    border: 1px solid transparent; /* Bordo trasparente */
+    padding: 10px; /* Spaziatura interna */
+    border-radius: 5px; /* Angoli arrotondati */
+    background-color: rgba(255, 255, 255, 0); /* Sfondo trasparente */
+    width: 95%; /* Ridurre leggermente la larghezza orizzontale */
+    max-width: none; /* Rimuove eventuali limiti di larghezza */
+    white-space: nowrap; /* Evita il ritorno a capo del contenuto */
 }
 
-/* Stile per gli elementi delle liste */
+/* Stile per ciascun contenitore */
 #recommendations-1-section ul,
 #recommendations-2-section ul,
 #recommendations-3-section ul,
@@ -222,13 +255,16 @@ footer {
 #recommendations-7-section ul {
     list-style: none;
     display: flex; /* Disposizione orizzontale degli elementi */
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Evita che gli elementi vadano a capo */
     gap: 10px;
     padding: 0;
     margin: 0;
+    overflow-x: auto; /* Abilita lo scroll orizzontale */
+    white-space: nowrap; /* Previene il ritorno a capo */
+    border: 1px solid transparent;
 }
 
-/* Stile per gli elementi */
+/* Stile per gli elementi con bordi trasparenti */
 #recommendations-1-section li,
 #recommendations-2-section li,
 #recommendations-3-section li,
@@ -236,25 +272,27 @@ footer {
 #recommendations-5-section li,
 #recommendations-6-section li,
 #recommendations-7-section li {
+    flex: 0 0 auto; /* Mantiene dimensione fissa */
     padding: 10px;
     display: flex;
     flex-direction: column; /* Titolo sotto l'immagine */
     align-items: center; /* Centra orizzontalmente */
     background-color: #f9f9f9;
     border-radius: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid transparent; /* Bordi completamente trasparenti */
     transition: background-color 0.3s ease;
 }
 
-/* Effetto hover per gli elementi */
+/* Effetto hover (senza bordi visibili) */
 #recommendations-1-section li:hover,
 #recommendations-2-section li:hover,
 #recommendations-3-section li:hover,
 #recommendations-4-section li:hover,
 #recommendations-5-section li:hover,
 #recommendations-6-section li:hover,
-#recommendations-7-seciton li:hover{
-    background-color: #e0e0e0;
+#recommendations-7-section li:hover {
+    background-color: rgba(224, 224, 224, 0.5); /* Leggera modifica allo sfondo */
+    border: 1px solid transparent; /* Resta trasparente anche al passaggio del mouse */
 }
 
 .movie-list li a.movie-title {
@@ -262,5 +300,3 @@ footer {
     display: block; /* Assicura che il titolo occupi tutta la larghezza */
     text-align: center; /* Centra il titolo sotto l'immagine */
 }
-
-

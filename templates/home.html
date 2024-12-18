@@ -3346,25 +3346,25 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
 
       // Aggiungi le raccomandazioni alle sezioni corrispondenti
       if (data.graph_recommendations.length > 0) {
-        recommendationsSection.appendChild(createRecommendationList(data.graph_recommendations, 'Lista 1'));
+        recommendationsSection.appendChild(createRecommendationList(data.graph_recommendations, 'Lista 1 : Graph Recommendations'));
       }
       if (data.sbert_recommendations.length > 0) {
-        recommendations2Section.appendChild(createRecommendationList(data.sbert_recommendations, 'Lista 2'));
+        recommendations2Section.appendChild(createRecommendationList(data.sbert_recommendations, 'Lista 2 : Sbert Recommendations'));
       }
       if (data.compgcn_recommendations.length > 0) {
-        recommendations3Section.appendChild(createRecommendationList(data.compgcn_recommendations, 'Lista 3'));
+        recommendations3Section.appendChild(createRecommendationList(data.compgcn_recommendations, 'Lista 3 : Compgcn Recommendations'));
       }
       if (data.vit_cls_recommendations.length > 0) {
-        recommendations4Section.appendChild(createRecommendationList(data.vit_cls_recommendations, 'Lista 4'));
+        recommendations4Section.appendChild(createRecommendationList(data.vit_cls_recommendations, 'Lista 4 : Vit cls Recommendations'));
       }
       if (data.vggish_recommendations.length > 0){
-        recommendations5Section.appendChild(createRecommendationList(data.vggish_recommendations, 'Lista 5'));
+        recommendations5Section.appendChild(createRecommendationList(data.vggish_recommendations, 'Lista 5 : Vggish Recommendations'));
       }
       if (data.r2p1d_recommendations.length > 0){
-        recommendations6Section.appendChild(createRecommendationList(data.r2p1d_recommendations, 'Lista 6'));
+        recommendations6Section.appendChild(createRecommendationList(data.r2p1d_recommendations, 'Lista 6 : R2p1d Recommendations'));
       }
       if (data.mini_recommendations.length > 0){
-        recommendations7Section.appendChild(createRecommendationList(data.mini_recommendations, 'Lista 7'));
+        recommendations7Section.appendChild(createRecommendationList(data.mini_recommendations, 'Lista 7 : Mini recommendations'));
       }
     }
   })

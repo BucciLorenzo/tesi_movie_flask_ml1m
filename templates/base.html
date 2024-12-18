@@ -5,31 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie4You</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_new.css') }}">
-    <style>
-        /* Impostazioni per il body e il layout flex */
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 90vh; /* Imposta l'altezza totale della finestra */
-            margin: 0; /* Rimuove margini predefiniti */
-            padding: 10 px;
-        }
-
-        main {
-            flex-grow: 1; /* Permette a main di occupare lo spazio disponibile */
-            overflow-y: auto; /* Abilita lo scorrimento verticale se necessario */
-            
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px; /* Riduci il padding per rendere il footer più sottile */
-            font-size: 12px; /* Puoi ridurre la dimensione del font se vuoi che il testo sia più piccolo */
-            color: white; /* Colore del testo del footer */
-            margin-top: 90px; /* Puoi mantenere o modificare questo margine */
-        }
-
-    </style>
 </head>
 <body>
     <header>
@@ -39,7 +14,12 @@
 
     <main>
         <div class="container">
-            {% block content %}{% endblock %}
+            {% block content %}
+            <!-- Esempio di contenuto che si estende orizzontalmente -->
+            <p style="white-space: nowrap; font-size: 18px;">
+                Questo è un contenuto molto lungo che supera lo spazio disponibile nel main e dovrebbe causare uno scorrimento orizzontale se supera la larghezza predefinita.
+            </p>
+            {% endblock %}
         </div>
     </main>
 
@@ -48,7 +28,3 @@
     </footer>
 </body>
 </html>
-
-
-
-
