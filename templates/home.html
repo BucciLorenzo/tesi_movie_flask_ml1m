@@ -3344,35 +3344,56 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
         return section;
       };
 
-      // Aggiungi le raccomandazioni alle sezioni corrispondenti
+      // Funzione per mescolare un array
+      function shuffleArray(array) {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+      }
+
+      // Crea un array con tutte le raccomandazioni
+      const allRecommendations = [];
+
       if (data.graph_recommendations.length > 0) {
-        recommendationsSection.appendChild(createRecommendationList(data.graph_recommendations, 'Lista 1 : Graph Recommendations'));
+        allRecommendations.push({ data: data.graph_recommendations, title: 'Graph Recommendations', section: recommendationsSection });
       }
       if (data.sbert_recommendations.length > 0) {
-        recommendations2Section.appendChild(createRecommendationList(data.sbert_recommendations, 'Lista 2 : Sbert Recommendations'));
-      }
+        allRecommendations.push({ data: data.sbert_recommendations, title: 'Sbert Recommendations', section: recommendations2Section });
+      } 
       if (data.compgcn_recommendations.length > 0) {
-        recommendations3Section.appendChild(createRecommendationList(data.compgcn_recommendations, 'Lista 3 : Compgcn Recommendations'));
+        allRecommendations.push({ data: data.compgcn_recommendations, title: 'Compgcn Recommendations', section: recommendations3Section });
       }
       if (data.vit_cls_recommendations.length > 0) {
-        recommendations4Section.appendChild(createRecommendationList(data.vit_cls_recommendations, 'Lista 4 : Vit cls Recommendations'));
+        allRecommendations.push({ data: data.vit_cls_recommendations, title: 'Vit cls Recommendations', section: recommendations4Section });
       }
-      if (data.vggish_recommendations.length > 0){
-        recommendations5Section.appendChild(createRecommendationList(data.vggish_recommendations, 'Lista 5 : Vggish Recommendations'));
+      if (data.vggish_recommendations.length > 0) {
+        allRecommendations.push({ data: data.vggish_recommendations, title: 'Vggish Recommendations', section: recommendations5Section });
       }
-      if (data.r2p1d_recommendations.length > 0){
-        recommendations6Section.appendChild(createRecommendationList(data.r2p1d_recommendations, 'Lista 6 : R2p1d Recommendations'));
+      if (data.r2p1d_recommendations.length > 0) {
+        allRecommendations.push({ data: data.r2p1d_recommendations, title: 'R2p1d Recommendations', section: recommendations6Section });
       }
-      if (data.mini_recommendations.length > 0){
-        recommendations7Section.appendChild(createRecommendationList(data.mini_recommendations, 'Lista 7 : Mini recommendations'));
+      if (data.mini_recommendations.length > 0) {
+        allRecommendations.push({ data: data.mini_recommendations, title: 'Mini Recommendations', section: recommendations7Section });
       }
-    }
-  })
-  .catch(error => console.error('Errore nel recupero delle raccomandazioni:', error));
-});
 
+      // Mescola le raccomandazioni
+      shuffleArray(allRecommendations);
+
+      // Mappa delle sezioni
+      const sections = [recommendationsSection, recommendations2Section, recommendations3Section, recommendations4Section, recommendations5Section, recommendations6Section, recommendations7Section];
+
+      // Aggiungi le raccomandazioni alle sezioni corrispondenti
+      allRecommendations.forEach((recommendation, index) => {
+        sections[index].appendChild(createRecommendationList(recommendation.data, `Lista ${index + 1} : ${recommendation.title}`));
+      });
+
+      }
+      })
+      .catch(error => console.error('Errore nel recupero delle raccomandazioni:', error));
+      });
 
  </script>
-
 
 {% endblock %}
