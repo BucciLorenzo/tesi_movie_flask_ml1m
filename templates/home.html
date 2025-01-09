@@ -26,18 +26,36 @@
       <h3>In base alle tue preferenze, ti suggeriamo...</h3>
       <div class="container_lists">
         <div id="recommendations-1-section" class="div_list_1"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-1" style="margin-top: 10px; display:none;">Valuta Lista 1</button>
+        </a>
         <div id="recommendations-2-section" class="div_list_2"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-2" style="margin-top: 10px; display:none;">Valuta Lista 2</button>
+        </a>
         <div id="recommendations-3-section" class="div_list_3"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-3" style="margin-top: 10px; display:none;">Valuta Lista 3</button>
+        </a>
         <div id="recommendations-4-section" class="div_list_4"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-4" style="margin-top: 10px; display:none;">Valuta Lista 4</button>
+        </a>
         <div id="recommendations-5-section" class="div_list_5"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-5" style="margin-top: 10px; display:none;">Valuta Lista 5</button>
+        </a>
         <div id="recommendations-6-section" class="div_list_6"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-6" style="margin-top: 10px; display:none;">Valuta Lista 6</button>
+        </a>
         <div id="recommendations-7-section" class="div_list_7"></div>
+        <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
+          <button id="evaluate-btn-7" style="margin-top: 10px; display:none;">Valuta Lista 7</button>
+        </a>
         <div style="clear: both;"></div>
       </div>
         <button id="get-recommendation-btn" style="display:none">Suggerisci!</button>        
-        <a id="evaluate-recommendation-button" href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank" style="display:none">
-          <button> Valuta </button>
-        </a>
       </div>
     </div>
 
@@ -6345,8 +6363,21 @@
           recommendations5Section.innerHTML = "";
           recommendations6Section.innerHTML = "";
           recommendations7Section.innerHTML = "";
-
-          evaluateButton.style.display='none';
+          
+          evaluatebtn1 = document.getElementById('evaluate-btn-1');
+          evaluatebtn1.style.display='none';
+          evaluatebtn2 = document.getElementById('evaluate-btn-2');
+          evaluatebtn2.style.display='none';
+          evaluatebtn3 = document.getElementById('evaluate-btn-3');
+          evaluatebtn3.style.display='none';
+          evaluatebtn4 = document.getElementById('evaluate-btn-4');
+          evaluatebtn4.style.display='none';
+          evaluatebtn5 = document.getElementById('evaluate-btn-5');
+          evaluatebtn5.style.display='none';
+          evaluatebtn6 = document.getElementById('evaluate-btn-6');
+          evaluatebtn6.style.display='none';
+          evaluatebtn7 = document.getElementById('evaluate-btn-7');
+          evaluatebtn7.style.display='none';
 
         }
       });
@@ -6393,7 +6424,14 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
     if (data.graph_recommendations.length == 0 && data.sbert_recommendations.length == 0 && data.compgcn_recommendations.length == 0 && data.vit_cls_recommendations.length == 0 && data.vggish_recommendations.length == 0 && data.r2p1d_recommendations.length == 0 && data.mini_recommendations.length == 0) {
       recommendationsSection.innerHTML = '<p>No recommendations are available</p>';
     } else {
-      document.getElementById('evaluate-recommendation-button').style.display='inline-block';
+      document.getElementById('evaluate-btn-1').style.display='inline-block';
+      document.getElementById('evaluate-btn-2').style.display='inline-block';
+      document.getElementById('evaluate-btn-3').style.display='inline-block';
+      document.getElementById('evaluate-btn-4').style.display='inline-block';
+      document.getElementById('evaluate-btn-5').style.display='inline-block';
+      document.getElementById('evaluate-btn-6').style.display='inline-block';
+      document.getElementById('evaluate-btn-7').style.display='inline-block';
+      
 
     // Funzione per creare la lista HTML per ogni raccomandazione
     const createRecommendationList = (recommendations, title) => {
