@@ -6238,6 +6238,12 @@
 
     name_map = load_map();
     name_dbpedia_map = load_dbpedia();
+
+
+    // Inizializza una lista per contenere i titoli delle raccomandazioni
+    const recommendationTitles = [];
+
+
     console.log('map read');
    // Function to handle live search
    const searchBox = document.getElementById('search-box');
@@ -6363,7 +6369,7 @@
           recommendations5Section.innerHTML = "";
           recommendations6Section.innerHTML = "";
           recommendations7Section.innerHTML = "";
-          
+
           evaluatebtn1 = document.getElementById('evaluate-btn-1');
           evaluatebtn1.style.display='none';
           evaluatebtn2 = document.getElementById('evaluate-btn-2');
@@ -6379,6 +6385,7 @@
           evaluatebtn7 = document.getElementById('evaluate-btn-7');
           evaluatebtn7.style.display='none';
 
+          
         }
       });
     }
@@ -6393,9 +6400,8 @@
 
     // Initial binding of the clear button
     bindClearProfileButton();
-
-
-    // Function to handle getting recommendations
+    
+// Function to handle getting recommendations
 // Funzione per gestire l'ottenimento delle raccomandazioni
 document.getElementById('get-recommendation-btn').addEventListener('click', function() {
   fetch('/recommendation', {
@@ -6510,19 +6516,128 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
 
       // Mescola le raccomandazioni
       shuffleArray(allRecommendations);
+      recommendationTitles.length = 0;
 
       // Mappa delle sezioni
       const sections = [recommendationsSection, recommendations2Section, recommendations3Section, recommendations4Section, recommendations5Section, recommendations6Section, recommendations7Section];
-
+      
+      
       // Aggiungi le raccomandazioni alle sezioni corrispondenti
       allRecommendations.forEach((recommendation, index) => {
+
+        recommendationTitles.push(recommendation.title);
+
         sections[index].appendChild(createRecommendationList(recommendation.data, `Lista ${index + 1} : ${recommendation.title}`));
+
       });
+
+      console.log('Titoli delle raccomandazioni in ordine:', recommendationTitles);
+
 
       }
       })
       .catch(error => console.error('Errore nel recupero delle raccomandazioni:', error));
       });
+
+      
+    document.getElementById('evaluate-btn-1').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[0];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+
+    document.getElementById('evaluate-btn-2').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[1];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+
+    document.getElementById('evaluate-btn-3').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[2];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+
+    document.getElementById('evaluate-btn-4').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[3];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+
+    document.getElementById('evaluate-btn-5').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[4];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+
+    document.getElementById('evaluate-btn-6').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[5];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+
+    document.getElementById('evaluate-btn-7').addEventListener('click', function() {
+        const algorithmName = recommendationTitles[6];
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ algorithm_name: algorithmName })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Evaluation logged:', data))
+        .catch(error => console.error('Error logging evaluation:', error));
+        });
+    
 
  </script>
 

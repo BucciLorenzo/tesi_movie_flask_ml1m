@@ -10,6 +10,10 @@ import numpy as np
 import faiss
 import uuid
 from read_id_title_dataset_tsv import read_movie_tsv
+import os
+import logging
+from flask import Flask, request, session, jsonify
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # For session encryption
@@ -390,6 +394,68 @@ def clear():
 @app.route('/profile_content')
 def profile_content():
     return render_template('profile_content.html', profile=session['user_profile'])
+
+# Directory per i file di log
+LOG_DIR = 'logs'
+os.makedirs(LOG_DIR, exist_ok=True)  # Crea la directory
+
+def setup_logging(session_id):  # Configura un sistema di logging specifico per una determinata sessione.
+    # Crea il percorso completo del file di log per la sessione specifica, utilizzando l'ID della sessione.
+    log_filename = os.path.join(LOG_DIR, f"{session_id}.log")
+    
+    # Ottieni il logger con il nome corrispondente all'ID della sessione.
+    logger = logging.getLogger(session_id)
+    
+    # Se il logger ha già dei handler, non aggiungerne altri (evita duplicazioni)
+    if not logger.hasHandlers():
+        # Imposta il livello di log a `INFO`, così verranno registrati solo messaggi con livello INFO o superiore.
+        logger.setLevel(logging.INFO)
+        
+        # Crea un gestore di file che scrive i log nel file specifico della sessione.
+        file_handler = logging.FileHandler(log_filename)
+        
+        # Definisce il formato dei messaggi di log. Ogni messaggio includerà il timestamp (`asctime`) e il contenuto del messaggio.
+        formatter = logging.Formatter('%(asctime)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        
+        # Aggiunge il gestore di file al logger, in modo che i messaggi vengano scritti nel file.
+        logger.addHandler(file_handler)
+        
+    return logger
+
+# Inizializza il logger per ogni sessione
+@app.before_request
+def init_session_logger():
+    if 'session_id' not in session:
+        session['session_id'] = datetime.now().strftime('%Y%m%d%H%M%S%f')
+    session['logger'] = setup_logging(session['session_id'])
+
+# Endpoint per il pulsante "Valuta"
+@app.route('/evaluate', methods=['POST'])
+def evaluate():
+    data = request.json
+    user_id = session.get('session_id')
+    algorithm_name = data.get('algorithm_name')
+    
+    # Logga le informazioni
+    logger = session['logger']
+    logger.info(f"User {user_id} evaluated with algorithm: {algorithm_name}")
+    
+    return jsonify({'status': 'success', 'message': 'Logged evaluation!'})
+
+# Endpoint per registrare le risposte del questionario
+#@app.route('/submit_questionnaire', methods=['POST'])
+#def submit_questionnaire():
+    #data = request.json
+    #user_id = session.get('session_id')
+    #responses = data.get('responses')
+    
+# Logga le rispost
+#logger = session['logger']
+#logger.info(f"User {user_id} submitted questionnaire responses: {responses}")
+    
+#return jsonify({'status': 'success', 'message': 'Logged questionnaire responses!'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
