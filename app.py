@@ -28,7 +28,7 @@ def bprint_yellow(text : str):
     print(f"\033[0;30;43m{text}\033[0m")
 
 # load dictionary ID-title
-file_path = r"data\dataset.tsv"
+file_path = 'data/dataset.tsv'
 id_to_title = read_movie_tsv(file_path)
 
 # load data
@@ -135,6 +135,7 @@ user_profile = {
     'r2p1d_embeddings' : [],
     'mini_embeddings' : []
 }
+
 
 # vectorizer
 vectorizer = TfidfVectorizer()
@@ -320,6 +321,9 @@ def add_movie(movie_id):
         session['user_profile']['vggish_embeddings'].append(vggish_embeddings[movie['title']])
         session['user_profile']['r2p1d_embeddings'].append(r2p1d_embeddings[movie['title']])
         session['user_profile']['mini_embeddings'].append(mini_embeddings[movie['title']]) 
+
+        #Logga l'aggiunta di un film
+        logging.info(f"Film aggiunto: {movie['title']} (ID: {movie['id']})")
     
     # Return JSON response instead of redirecting
     return jsonify({'status': 'success', 'movie': movie})
@@ -356,6 +360,31 @@ def recommendation():
         r2p1d_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_r2p1d] 
         mini_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_mini]
 
+        # Logga i film raccomandati (solo titoli)
+        logging.info(f"Raccomandazioni per l'utente {session['user_id']}:")
+
+        logging.info("Graph-based: " + ", ".join([movie["title"] for movie in graph_recommendations]))
+        logging.info("SBERT-based: " + ", ".join([movie["title"] for movie in sbert_recommendations]))
+        logging.info("CompGCN-based: " + ", ".join([movie["title"] for movie in compgcn_recommendations]))
+        logging.info("ViT-based: " + ", ".join([movie["title"] for movie in vit_cls_recommendations]))
+        logging.info("VGGish-based: " + ", ".join([movie["title"] for movie in vggish_recommendations]))
+        logging.info("R2P1D-based: " + ", ".join([movie["title"] for movie in r2p1d_recommendations]))
+        logging.info("MiniLM-based: " + ", ".join([movie["title"] for movie in mini_recommendations]))
+
+        # Popola graph_titles qui
+        global graph_titles
+        global sbert_titles
+
+        # Popola graph_titles con gli ID dei film anziché i titoli
+        graph_titles = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_graph] 
+        sbert_titles = [str(dataset[dataset['Title'] == key].iloc[0]['Title']) for key in rec_sbert]
+        #graph_titles = [recommendation['title'] for recommendation in graph_recommendations]
+        #sbert_titles = [recommendation['title'] for recommendation in sbert_recommendations]
+        #graph_titles = [id_to_title.get(str(item), item) for item in graph_recommendations]
+        # Log per verificare le liste
+        bprint_yellow(f"Graph Titles: {graph_titles}")
+        
+        
         return jsonify({'status': 'success', 
                         'graph_recommendations': graph_recommendations, 
                         'sbert_recommendations': sbert_recommendations, 
@@ -415,7 +444,7 @@ def setup_logging(session_id):  # Configura un sistema di logging specifico per 
         file_handler = logging.FileHandler(log_filename)
         
         # Definisce il formato dei messaggi di log. Ogni messaggio includerà il timestamp (`asctime`) e il contenuto del messaggio.
-        formatter = logging.Formatter('%(asctime)s - %(message)s')
+        formatter = logging.Formatter('%(message)s', datefmt='%Y-%m-%d %H:%M:%S,%f')
         file_handler.setFormatter(formatter)
         
         # Aggiunge il gestore di file al logger, in modo che i messaggi vengano scritti nel file.
@@ -434,12 +463,36 @@ def init_session_logger():
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
     data = request.json
-    user_id = session.get('session_id')
+    #user_id = session.get('session_id')
     algorithm_name = data.get('algorithm_name')
+    current_timestamp = datetime.now()
+    timestamp = current_timestamp.strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]  # Come nei log
+
+    #Ottiene i film degli utenti dalla sessione
+    user_movies = session['user_profile'].get('movies',[])
+    movie_titles = [movie['title'] for movie in user_movies] #estrae i titoli dei film
+
     
+    bprint_yellow(f"Graph Titles EVALUATE: {graph_titles}")
+
+    #PROVA
+    titles_map = {
+        'Graph Recommendations': graph_titles,
+        'Sbert Recommendations': sbert_titles,
+    }
+
+    # Inizializza la variabile per i titoli generici
+    selected_titles = []
+
+    # Assegna i titoli in base al nome dell'algoritmo
+    if algorithm_name in titles_map:
+        selected_titles = titles_map[algorithm_name]
+
     # Logga le informazioni
     logger = session['logger']
-    logger.info(f"User {user_id} evaluated with algorithm: {algorithm_name}")
+    logger.info(f"{timestamp}#{algorithm_name}#{'-'.join(movie_titles)}#{'-'.join(selected_titles)}")
+    
+
     
     return jsonify({'status': 'success', 'message': 'Logged evaluation!'})
 

@@ -6528,11 +6528,11 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
         recommendationTitles.push(recommendation.title);
 
         sections[index].appendChild(createRecommendationList(recommendation.data, `Lista ${index + 1} : ${recommendation.title}`));
+        
+        
+        
 
       });
-
-      console.log('Titoli delle raccomandazioni in ordine:', recommendationTitles);
-
 
       }
       })
@@ -6540,8 +6540,10 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
       });
 
       
-    document.getElementById('evaluate-btn-1').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[0];
+      const evaluateButtons = document.querySelectorAll('[id^="evaluate-btn-"]');
+evaluateButtons.forEach((button, index) => {
+    button.addEventListener('click', function() {
+        const algorithmName = recommendationTitles[index];
         fetch('/evaluate', {
             method: 'POST',
             headers: {
@@ -6552,92 +6554,9 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
         .then(response => response.json())
         .then(data => console.log('Evaluation logged:', data))
         .catch(error => console.error('Error logging evaluation:', error));
-        });
+    });
+});
 
-    document.getElementById('evaluate-btn-2').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[1];
-        fetch('/evaluate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ algorithm_name: algorithmName })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Evaluation logged:', data))
-        .catch(error => console.error('Error logging evaluation:', error));
-        });
-
-    document.getElementById('evaluate-btn-3').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[2];
-        fetch('/evaluate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ algorithm_name: algorithmName })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Evaluation logged:', data))
-        .catch(error => console.error('Error logging evaluation:', error));
-        });
-
-    document.getElementById('evaluate-btn-4').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[3];
-        fetch('/evaluate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ algorithm_name: algorithmName })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Evaluation logged:', data))
-        .catch(error => console.error('Error logging evaluation:', error));
-        });
-
-    document.getElementById('evaluate-btn-5').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[4];
-        fetch('/evaluate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ algorithm_name: algorithmName })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Evaluation logged:', data))
-        .catch(error => console.error('Error logging evaluation:', error));
-        });
-
-    document.getElementById('evaluate-btn-6').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[5];
-        fetch('/evaluate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ algorithm_name: algorithmName })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Evaluation logged:', data))
-        .catch(error => console.error('Error logging evaluation:', error));
-        });
-
-    document.getElementById('evaluate-btn-7').addEventListener('click', function() {
-        const algorithmName = recommendationTitles[6];
-        fetch('/evaluate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ algorithm_name: algorithmName })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Evaluation logged:', data))
-        .catch(error => console.error('Error logging evaluation:', error));
-        });
-    
 
  </script>
 
