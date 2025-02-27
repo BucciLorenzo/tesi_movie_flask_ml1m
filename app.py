@@ -14,6 +14,9 @@ import os
 import logging
 from flask import Flask, request, session, jsonify
 from datetime import datetime
+import time
+
+ID_OFFSET = 6040  # Definizione della costante id primo item
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # For session encryption
@@ -116,10 +119,19 @@ mini_index = faiss.IndexFlatL2(mini_embedding_dimension)
 faiss.normalize_L2(mini_embedding_matrix)
 mini_index.add(mini_embedding_matrix)
 
-# build movie catalog
+# build movie catalog - Es 0 Jumanji
 movie_catalog = []
 for i, row in dataset.iterrows():
     movie_catalog.append({'id': i, 'title': row['Title']})
+movie_titles_dataset = list(set(dataset['Title']))
+movie_titles = list(set(dataset['Title']))
+
+
+# build movie catalog with id_items title items - Es 6040 Jumanji
+# serve a mappare l'id originale dell'item nel file di log
+movie_catalog_id_title = []
+for i, row in dataset.iterrows():
+    movie_catalog_id_title.append({'id': row['id'], 'title': row['Title']})
 movie_titles_dataset = list(set(dataset['Title']))
 movie_titles = list(set(dataset['Title']))
 
@@ -155,7 +167,7 @@ def vsm_query(query, limit=20):
     results = []
     for id in ranked_indices[0:limit]:
         row = dataset[dataset['Title'] == movie_titles[id]]
-        results.append({'id': str(row.index[0]), 
+        results.append({'id': str(row.index[0]),                #results.append({'id': str(row.index[0]), 
                         'title': row['Title'].values[0]})
 
     return results
@@ -314,6 +326,7 @@ def add_movie(movie_id):
     
     if movie and movie not in session['user_profile']['movies']:
         session['user_profile']['movies'].append(movie)
+        bprint_yellow(f"FILM AGGIUNTO: {movie}")
         session['user_profile']['graph_embeddings'].append(graph_embeddings[movie['title']])
         session['user_profile']['sbert_embeddings'].append(sbert_embeddings[movie['title']])
         session['user_profile']['compgcn_embeddings'].append(compgcn_embeddings[movie['title']])
@@ -372,17 +385,19 @@ def recommendation():
         logging.info("MiniLM-based: " + ", ".join([movie["title"] for movie in mini_recommendations]))
 
         # Popola graph_titles qui
-        global graph_titles
-        global sbert_titles
+        global graph_ids,sbert_ids,compgcn_ids,vit_ids,vggish_ids,r2p1d_ids,minilm_ids
 
         # Popola graph_titles con gli ID dei film anziché i titoli
-        graph_titles = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_graph] 
-        sbert_titles = [str(dataset[dataset['Title'] == key].iloc[0]['Title']) for key in rec_sbert]
-        #graph_titles = [recommendation['title'] for recommendation in graph_recommendations]
-        #sbert_titles = [recommendation['title'] for recommendation in sbert_recommendations]
-        #graph_titles = [id_to_title.get(str(item), item) for item in graph_recommendations]
+        graph_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_graph] 
+        sbert_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_sbert]
+        compgcn_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_compgcn]
+        vit_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_vit_cls]
+        vggish_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_vggish]
+        r2p1d_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_r2p1d]
+        minilm_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_mini]
+
         # Log per verificare le liste
-        bprint_yellow(f"Graph Titles: {graph_titles}")
+        bprint_yellow(f"Graph Titles: {graph_ids}")
         
         
         return jsonify({'status': 'success', 
@@ -465,20 +480,26 @@ def evaluate():
     data = request.json
     #user_id = session.get('session_id')
     algorithm_name = data.get('algorithm_name')
-    current_timestamp = datetime.now()
-    timestamp = current_timestamp.strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]  # Come nei log
+    timestamp = int(time.time() * 1000) # Millisecondi
 
     #Ottiene i film degli utenti dalla sessione
     user_movies = session['user_profile'].get('movies',[])
-    movie_titles = [movie['title'] for movie in user_movies] #estrae i titoli dei film
 
-    
-    bprint_yellow(f"Graph Titles EVALUATE: {graph_titles}")
+    #Ottengo gli id dei film del profilo utente da stampare sul log
+    #Ottengo gli id originali dei film mappando gli id del catalogo che parte da 0 con il catalogo con i veri id
+    movie_ids = [
+        catalog['id'] for catalog in movie_catalog_id_title
+        if any(catalog['title'] == movie['title'] for movie in user_movies)
+    ]
 
-    #PROVA
     titles_map = {
-        'Graph Recommendations': graph_titles,
-        'Sbert Recommendations': sbert_titles,
+        'Graph Recommendations': graph_ids,
+        'Sbert Recommendations': sbert_ids,
+        'Compgcn Recommendations': compgcn_ids,
+        'Vit cls Recommendations' : vit_ids,
+        'Vggish Recommendations' : vggish_ids,
+        'R2p1d Recommendations' : r2p1d_ids,
+        'Mini Recommendations' : minilm_ids,
     }
 
     # Inizializza la variabile per i titoli generici
@@ -490,10 +511,9 @@ def evaluate():
 
     # Logga le informazioni
     logger = session['logger']
-    logger.info(f"{timestamp}#{algorithm_name}#{'-'.join(movie_titles)}#{'-'.join(selected_titles)}")
+    logger.info(f"{timestamp}###{algorithm_name}###{';;;'.join(map(str, movie_ids))}###{';;;'.join(selected_titles)}")
     
 
-    
     return jsonify({'status': 'success', 'message': 'Logged evaluation!'})
 
 # Endpoint per registrare le risposte del questionario
