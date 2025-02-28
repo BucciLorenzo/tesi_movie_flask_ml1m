@@ -23,7 +23,7 @@
 
     <div style="flex: 1; margin-left: 20px;">
       
-      <h3>In base alle tue preferenze, ti suggeriamo...</h3>
+      <h3 id="lblpreferences">Based on your preferences, we suggest...</h3>
       <div class="container_lists">
         <div id="recommendations-1-section" class="div_list_1"></div>
         <a href="https://docs.google.com/forms/d/1I_XPgf6y3TayRC73V4QqUaF2C7Zdny1fsPuSWTAtw_8/" target="_blank">
@@ -6417,6 +6417,17 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
     const recommendations5Section = document.getElementById('recommendations-5-section'); // Sezione per vggish_recommendations
     const recommendations6Section = document.getElementById('recommendations-6-section'); // Sezione per r2p1d_recommendations
     const recommendations7Section = document.getElementById('recommendations-7-section'); // Sezione per mini_recommendations
+
+    document.getElementById('lblpreferences').innerHTML = 'Based on your preferences, we suggest...';
+    // Nascondi tutte le sezioni
+    recommendationsSection.style.display = 'block';
+    recommendations2Section.style.display = 'none';
+    recommendations3Section.style.display = 'none';
+    recommendations4Section.style.display = 'none';
+    recommendations5Section.style.display = 'none';
+    recommendations6Section.style.display = 'none';
+    recommendations7Section.style.display = 'none';
+
     recommendationsSection.innerHTML = ''; 
     recommendations2Section.innerHTML = ''; 
     recommendations3Section.innerHTML = '';
@@ -6431,12 +6442,12 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
       recommendationsSection.innerHTML = '<p>No recommendations are available</p>';
     } else {
       document.getElementById('evaluate-btn-1').style.display='inline-block';
-      document.getElementById('evaluate-btn-2').style.display='inline-block';
-      document.getElementById('evaluate-btn-3').style.display='inline-block';
-      document.getElementById('evaluate-btn-4').style.display='inline-block';
-      document.getElementById('evaluate-btn-5').style.display='inline-block';
-      document.getElementById('evaluate-btn-6').style.display='inline-block';
-      document.getElementById('evaluate-btn-7').style.display='inline-block';
+      //document.getElementById('evaluate-btn-2').style.display='inline-block';
+      //document.getElementById('evaluate-btn-3').style.display='inline-block';
+      //document.getElementById('evaluate-btn-4').style.display='inline-block';
+      //document.getElementById('evaluate-btn-5').style.display='inline-block';
+      //document.getElementById('evaluate-btn-6').style.display='inline-block';
+      //document.getElementById('evaluate-btn-7').style.display='inline-block';
       
 
     // Funzione per creare la lista HTML per ogni raccomandazione
@@ -6555,6 +6566,43 @@ evaluateButtons.forEach((button, index) => {
         .then(data => console.log('Evaluation logged:', data))
         .catch(error => console.error('Error logging evaluation:', error));
     });
+});
+
+
+//Visualizza uno alla volta le sezioni recommender e i relativi button
+document.addEventListener("DOMContentLoaded", function () {
+    let currentIndex = 1; // Inizia dalla prima lista
+
+    function handleButtonClick(index) {
+        // Nasconde la lista e il bottone attuali
+        let currentList = document.getElementById(`recommendations-${index}-section`);
+        let currentButton = document.getElementById(`evaluate-btn-${index}`);
+
+        if (currentList) currentList.style.display = "none";
+        if (currentButton) currentButton.style.display = "none";
+
+        // Passa alla lista e bottone successivi
+        let nextIndex = index + 1;
+        let nextList = document.getElementById(`recommendations-${nextIndex}-section`);
+        let nextButton = document.getElementById(`evaluate-btn-${nextIndex}`);
+
+        if (nextList) nextList.style.display = "block";
+        if (nextButton) nextButton.style.display = "inline-block";
+    }
+
+    // Aggiunge l'evento click a ogni bottone
+    for (let i = 1; i <= 7; i++) {
+        let button = document.getElementById(`evaluate-btn-${i}`);
+        if (button) {
+            button.addEventListener("click", function () {
+                handleButtonClick(i);
+
+                if (i === 7) {
+                  document.getElementById('lblpreferences').innerHTML = 'Thank you for voting on all the recommended movie lists! Your feedback helps us improve future suggestions. Enjoy exploring new films!';
+                }
+            });
+        }
+    }
 });
 
 
