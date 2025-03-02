@@ -300,3 +300,50 @@ footer {
     display: block; /* Assicura che il titolo occupi tutta la larghezza */
     text-align: center; /* Centra il titolo sotto l'immagine */
 }
+
+.survey-form {
+    max-width: 1200px; /* Aumenta la larghezza massima */
+    min-width: 1000px; /* Imposta una larghezza minima maggiore */
+    margin: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.survey-table {
+    width: 100%; /* Assicura che la tabella occupi tutto lo spazio disponibile */
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.survey-table th, .survey-table td {
+    padding: 18px; /* Aumenta ancora un po' il padding per una migliore leggibilità */
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 16px; /* Leggermente più grande per migliorare la visibilità */
+}
+
+.survey-table th {
+    background-color: #2c3e50;
+    color: white;
+}
+
+.survey-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 18px; /* Aumenta leggermente il testo del bottone */
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+}
+
+.survey-button:hover {
+    background-color: #2980b9;
+}
+
+
+

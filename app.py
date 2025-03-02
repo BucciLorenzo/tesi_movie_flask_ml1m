@@ -26,6 +26,9 @@ from flask_session import Session
 app.config['SESSION_TYPE'] = 'filesystem'  # Use filesystem for storing session data
 Session(app)
 
+@app.route('/survey')
+def survey():
+    return render_template('survey.html')
 
 def bprint_yellow(text : str):
     print(f"\033[0;30;43m{text}\033[0m")
@@ -363,51 +366,31 @@ def recommendation():
         r2p1d_user_emb = np.mean(session['user_profile']['r2p1d_embeddings'], axis=0) 
         mini_user_emb = np.mean(session['user_profile']['mini_embeddings'], axis=0)
 
-        rec_graph, rec_sbert, rec_compgcn, rec_vit_cls, rec_vggish, rec_r2p1d, rec_mini = get_recommendation(graph_user_emb, sbert_user_emb, compgcn_user_emb, vit_cls_user_emb, vggish_user_emb, r2p1d_user_emb, mini_user_emb, liked_titles, top_k=top_k)
+        rec_graph, rec_sbert, rec_compgcn, rec_vit_cls, rec_vggish, rec_r2p1d, rec_mini = get_recommendation(
+            graph_user_emb, sbert_user_emb, compgcn_user_emb, vit_cls_user_emb, vggish_user_emb, 
+            r2p1d_user_emb, mini_user_emb, liked_titles, top_k=top_k
+        )
 
-        graph_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_graph] 
-        sbert_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_sbert] 
-        compgcn_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_compgcn] 
-        vit_cls_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_vit_cls] 
-        vggish_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_vggish] 
-        r2p1d_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_r2p1d] 
-        mini_recommendations = [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_mini]
-
-        # Logga i film raccomandati (solo titoli)
-        logging.info(f"Raccomandazioni per l'utente {session['user_id']}:")
-
-        logging.info("Graph-based: " + ", ".join([movie["title"] for movie in graph_recommendations]))
-        logging.info("SBERT-based: " + ", ".join([movie["title"] for movie in sbert_recommendations]))
-        logging.info("CompGCN-based: " + ", ".join([movie["title"] for movie in compgcn_recommendations]))
-        logging.info("ViT-based: " + ", ".join([movie["title"] for movie in vit_cls_recommendations]))
-        logging.info("VGGish-based: " + ", ".join([movie["title"] for movie in vggish_recommendations]))
-        logging.info("R2P1D-based: " + ", ".join([movie["title"] for movie in r2p1d_recommendations]))
-        logging.info("MiniLM-based: " + ", ".join([movie["title"] for movie in mini_recommendations]))
-
-        # Popola graph_titles qui
-        global graph_ids,sbert_ids,compgcn_ids,vit_ids,vggish_ids,r2p1d_ids,minilm_ids
-
-        # Popola graph_titles con gli ID dei film anziché i titoli
-        graph_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_graph] 
-        sbert_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_sbert]
-        compgcn_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_compgcn]
-        vit_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_vit_cls]
-        vggish_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_vggish]
-        r2p1d_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_r2p1d]
-        minilm_ids = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_mini]
+        # Salva gli ID delle raccomandazioni nella sessione
+        session['graph_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_graph] 
+        session['sbert_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_sbert]
+        session['compgcn_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_compgcn]
+        session['vit_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_vit_cls]
+        session['vggish_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_vggish]
+        session['r2p1d_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_r2p1d]
+        session['minilm_ids'] = [str(dataset[dataset['Title'] == key].iloc[0]['id']) for key in rec_mini]
 
         # Log per verificare le liste
-        bprint_yellow(f"Graph Titles: {graph_ids}")
-        
-        
+        bprint_yellow(f"Graph Titles: {session['graph_ids']}")
+
         return jsonify({'status': 'success', 
-                        'graph_recommendations': graph_recommendations, 
-                        'sbert_recommendations': sbert_recommendations, 
-                        'compgcn_recommendations': compgcn_recommendations, 
-                        'vit_cls_recommendations': vit_cls_recommendations, 
-                        'vggish_recommendations': vggish_recommendations, 
-                        'r2p1d_recommendations': r2p1d_recommendations, 
-                        'mini_recommendations': mini_recommendations})
+                        'graph_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_graph], 
+                        'sbert_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_sbert], 
+                        'compgcn_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_compgcn], 
+                        'vit_cls_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_vit_cls], 
+                        'vggish_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_vggish], 
+                        'r2p1d_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_r2p1d], 
+                        'mini_recommendations': [{'title': dataset[dataset['Title'] == key].iloc[0]['Title']} for key in rec_mini]})
     else: 
         return jsonify({'status': 'success', 
                         'graph_recommendations': [], 
@@ -417,6 +400,7 @@ def recommendation():
                         'vggish_recommendations': [], 
                         'r2p1d_recommendations': [], 
                         'mini_recommendations': []})
+
 
 
 @app.route('/clear', methods=['POST'])
@@ -439,33 +423,36 @@ def clear():
 def profile_content():
     return render_template('profile_content.html', profile=session['user_profile'])
 
+################################## DEFINIZIONE DEL LOG ###################################################
 # Directory per i file di log
 LOG_DIR = 'logs'
 os.makedirs(LOG_DIR, exist_ok=True)  # Crea la directory
 
-def setup_logging(session_id):  # Configura un sistema di logging specifico per una determinata sessione.
-    # Crea il percorso completo del file di log per la sessione specifica, utilizzando l'ID della sessione.
+class CustomFileHandler(logging.FileHandler):
+    def emit(self, record):
+        # Evita l'aggiunta di \n alla fine del messaggio
+        msg = self.format(record)
+        self.stream.write(msg)  # Scrive il messaggio senza \n finale
+        self.flush()  # Forza la scrittura immediata
+
+def setup_logging(session_id):  
     log_filename = os.path.join(LOG_DIR, f"{session_id}.log")
-    
-    # Ottieni il logger con il nome corrispondente all'ID della sessione.
     logger = logging.getLogger(session_id)
     
-    # Se il logger ha già dei handler, non aggiungerne altri (evita duplicazioni)
     if not logger.hasHandlers():
-        # Imposta il livello di log a `INFO`, così verranno registrati solo messaggi con livello INFO o superiore.
         logger.setLevel(logging.INFO)
         
-        # Crea un gestore di file che scrive i log nel file specifico della sessione.
-        file_handler = logging.FileHandler(log_filename)
+        # Crea il CustomFileHandler
+        file_handler = CustomFileHandler(log_filename)
         
-        # Definisce il formato dei messaggi di log. Ogni messaggio includerà il timestamp (`asctime`) e il contenuto del messaggio.
+        # Definisce il formato del log (senza newline finale)
         formatter = logging.Formatter('%(message)s', datefmt='%Y-%m-%d %H:%M:%S,%f')
         file_handler.setFormatter(formatter)
         
-        # Aggiunge il gestore di file al logger, in modo che i messaggi vengano scritti nel file.
         logger.addHandler(file_handler)
         
     return logger
+
 
 # Inizializza il logger per ogni sessione
 @app.before_request
@@ -474,32 +461,81 @@ def init_session_logger():
         session['session_id'] = datetime.now().strftime('%Y%m%d%H%M%S%f')
     session['logger'] = setup_logging(session['session_id'])
 
+###########################################################################################################
+
+# Lista per memorizzare le risposte
+responses = []
+
+@app.route('/')
+def index():
+    return render_template('survey.html')
+
+#Endpoint per i dati del sondaggio
+@app.route('/submit', methods=['POST'])
+def submit():
+    user_responses = []
+
+    # Raccogli le risposte
+    for i in range(1, 15):  # 14 domande
+        answer = request.form.get(f'q{i}')
+        if answer:
+            user_responses.append(int(answer))
+
+    # Stampa in giallo nel terminale
+    print("\033[93m", user_responses, "\033[0m")  
+
+    # Salva le risposte nella sessione
+    session['user_responses'] = user_responses
+
+    # Recupera le risposte salvate in sessione
+    user_responses = session.get('user_responses', [])
+
+    # Ottieni il logger per la sessione corrente
+    session_id = session.get('session_id')
+    logger = setup_logging(session_id)
+
+    timestamp = int(time.time() * 1000)  # Millisecondi
+    log_message = "###" + ";;;".join(map(str, user_responses))
+
+    logger.info(log_message)
+
+    #Va a capo dopo aver scritto le risposte dell'utente**
+    logger.info("\n")  # Aggiungi un ritorno a capo qui, dopo aver scritto le risposte
+
+    # Messaggio di feedback per l'utente
+    return '''
+    <script>
+        alert("Thank you for completing the survey! The page will close in 2 seconds.");
+        setTimeout(function() { window.close(); }, 2000);
+    </script>
+    '''
+
 # Endpoint per il pulsante "Valuta"
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
     data = request.json
-    #user_id = session.get('session_id')
     algorithm_name = data.get('algorithm_name')
-    timestamp = int(time.time() * 1000) # Millisecondi
+    timestamp = int(time.time() * 1000)  # Millisecondi
 
-    #Ottiene i film degli utenti dalla sessione
-    user_movies = session['user_profile'].get('movies',[])
+    # Ottiene i film degli utenti dalla sessione
+    user_movies = session['user_profile'].get('movies', [])
 
-    #Ottengo gli id dei film del profilo utente da stampare sul log
-    #Ottengo gli id originali dei film mappando gli id del catalogo che parte da 0 con il catalogo con i veri id
+    # Ottengo gli id dei film del profilo utente da stampare sul log
+    # Ottengo gli id originali dei film mappando gli id del catalogo che parte da 0 con il catalogo con i veri id
     movie_ids = [
         catalog['id'] for catalog in movie_catalog_id_title
         if any(catalog['title'] == movie['title'] for movie in user_movies)
     ]
 
+    # Ottieni gli ID delle raccomandazioni dalla sessione
     titles_map = {
-        'Graph Recommendations': graph_ids,
-        'Sbert Recommendations': sbert_ids,
-        'Compgcn Recommendations': compgcn_ids,
-        'Vit cls Recommendations' : vit_ids,
-        'Vggish Recommendations' : vggish_ids,
-        'R2p1d Recommendations' : r2p1d_ids,
-        'Mini Recommendations' : minilm_ids,
+        'Graph Recommendations': session.get('graph_ids', []),
+        'Sbert Recommendations': session.get('sbert_ids', []),
+        'Compgcn Recommendations': session.get('compgcn_ids', []),
+        'Vit cls Recommendations': session.get('vit_ids', []),
+        'Vggish Recommendations': session.get('vggish_ids', []),
+        'R2p1d Recommendations': session.get('r2p1d_ids', []),
+        'Mini Recommendations': session.get('minilm_ids', []),
     }
 
     # Inizializza la variabile per i titoli generici
@@ -512,23 +548,8 @@ def evaluate():
     # Logga le informazioni
     logger = session['logger']
     logger.info(f"{timestamp}###{algorithm_name}###{';;;'.join(map(str, movie_ids))}###{';;;'.join(selected_titles)}")
-    
 
     return jsonify({'status': 'success', 'message': 'Logged evaluation!'})
-
-# Endpoint per registrare le risposte del questionario
-#@app.route('/submit_questionnaire', methods=['POST'])
-#def submit_questionnaire():
-    #data = request.json
-    #user_id = session.get('session_id')
-    #responses = data.get('responses')
-    
-# Logga le rispost
-#logger = session['logger']
-#logger.info(f"User {user_id} submitted questionnaire responses: {responses}")
-    
-#return jsonify({'status': 'success', 'message': 'Logged questionnaire responses!'})
-
 
 if __name__ == '__main__':
     app.run(debug=True)
