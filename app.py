@@ -301,7 +301,7 @@ def before_request():
 # Home route: Displays search form
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('userinfo.html')
 
 # Search route: Handles movie searches
 @app.route('/search', methods=['POST'])
@@ -551,5 +551,129 @@ def evaluate():
 
     return jsonify({'status': 'success', 'message': 'Logged evaluation!'})
 
+@app.route('/remove_movie/<int:movie_id>', methods=['POST'])
+def remove_movie(movie_id):
+    if 'user_profile' in session and 'movies' in session['user_profile']:
+        user_profile = session['user_profile']
+
+        # Trova il film da rimuovere
+        movie_to_remove = next((movie for movie in user_profile['movies'] if movie['id'] == movie_id), None)
+
+        if movie_to_remove:
+            # Rimuove il film dalla lista
+            user_profile['movies'] = [movie for movie in user_profile['movies'] if movie['id'] != movie_id]
+
+            # Reset degli embedding
+            user_profile['graph_embeddings'] = []
+            user_profile['sbert_embeddings'] = []
+            user_profile['compgcn_embeddings'] = []
+            user_profile['vit_cls_embeddings'] = []
+            user_profile['vggish_embeddings'] = []
+            user_profile['r2p1d_embeddings'] = []
+            user_profile['mini_embeddings'] = []
+
+            session['user_profile'] = user_profile  # Aggiorna la sessione
+            session.modified = True  # Segnala a Flask che la sessione è stata modificata
+
+            return jsonify({'status': 'success', 'remaining_movies': user_profile['movies']})
+
+    return jsonify({'status': 'error', 'message': 'Movie not found'})
+
+#Recupera dati se sono già presenti in una sessione precedente
+def reload_embeddings():
+    if 'user_profile' in session and 'movies' in session['user_profile']:
+        user_profile = session['user_profile']
+        movies = user_profile['movies']
+
+        # Se ci sono film nella sessione, ricarichiamo gli embedding
+        if movies:
+            user_profile['graph_embeddings'] = []
+            user_profile['sbert_embeddings'] = []
+            user_profile['compgcn_embeddings'] = []
+            user_profile['vit_cls_embeddings'] = []
+            user_profile['vggish_embeddings'] = []
+            user_profile['r2p1d_embeddings'] = []
+            user_profile['mini_embeddings'] = []
+
+            for movie in movies:
+                title = movie['title']
+                if title in graph_embeddings:
+                    user_profile['graph_embeddings'].append(graph_embeddings[title])
+                    user_profile['sbert_embeddings'].append(sbert_embeddings[title])
+                    user_profile['compgcn_embeddings'].append(compgcn_embeddings[title])
+                    user_profile['vit_cls_embeddings'].append(vit_cls_embeddings[title])
+                    user_profile['vggish_embeddings'].append(vggish_embeddings[title])
+                    user_profile['r2p1d_embeddings'].append(r2p1d_embeddings[title])
+                    user_profile['mini_embeddings'].append(mini_embeddings[title])
+
+            session['user_profile'] = user_profile
+            session.modified = True
+
+@app.before_request
+def before_request():
+    initialize_user_session()
+    reload_embeddings()  # Ricarica gli embedding all'avvio
+
+
+############### USER INFO ##################
+
+## DEFINIZIONE DEL LOG #####
+# Directory per i file di log
+LOG_DIR = 'logs_user_info'
+os.makedirs(LOG_DIR, exist_ok=True)  # Crea la directory
+
+def setup_logging(session_id):  
+    log_filename = os.path.join(LOG_DIR, f"{session_id}.log")
+    logger = logging.getLogger(session_id)
+    
+    if not logger.hasHandlers():
+        logger.setLevel(logging.INFO)
+        
+        # Usa il FileHandler standard per il log
+        file_handler = logging.FileHandler(log_filename)
+        
+        # Definisce il formato del log (senza newline finale)
+        formatter = logging.Formatter('%(message)s', datefmt='%Y-%m-%d %H:%M:%S,%f')
+        file_handler.setFormatter(formatter)
+        
+        logger.addHandler(file_handler)
+        
+    return logger
+
+
+# Inizializza il logger per ogni sessione
+@app.before_request
+def init_session_logger():
+    if 'session_id' not in session:
+        session['session_id'] = datetime.now().strftime('%Y%m%d%H%M%S%f')
+    session['logger'] = setup_logging(session['session_id'])
+
+@app.route('/')
+def user_info():
+    return render_template('userinfo.html')
+
+@app.route('/submit_info', methods=['POST'])
+def submit_info():
+    # Prendere i dati dal form
+    age = request.form.get('age')
+    gender = request.form.get('gender')
+    education = request.form.get('education')
+    recommender_knowledge = request.form.get('recommender-knowledge')
+
+    # Registra le informazioni nel log
+    logger = session.get('logger')
+    if logger:
+        logger.info(f"{age}###{gender}###{education}###{recommender_knowledge}")
+    
+    
+    bprint_yellow(f"Age: {age}, Gender: {gender}, Education: {education}, Knowledge: {recommender_knowledge}")
+
+    # Reindirizza a home.html
+    return render_template('home.html', age=age, gender=gender, education=education, recommender_knowledge=recommender_knowledge)
+
+
+###############################################
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+    #app.run(debug=True)

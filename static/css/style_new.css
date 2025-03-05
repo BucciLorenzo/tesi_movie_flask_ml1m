@@ -345,5 +345,38 @@ footer {
     background-color: #2980b9;
 }
 
+.movie-container {
+    display: inline-block;
+    margin-right: 20px;
+    text-align: center;
+    position: relative;
+    margin-top: 5px; /* Riduce lo spazio superiore del contenitore del film */
+}
 
+.movie-poster {
+    max-height: 80px;
+    width: auto;
+}
 
+.remove-movie-btn {
+    background: none;
+    border: none;
+    color: rgb(209, 77, 77);
+    cursor: pointer;
+    font-size: 14px; /* Dimensione della X */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px auto; /* Ridotto margine inferiore a 10px */
+    padding: 2px; /* Ridotto ancora il padding per avvicinare la X */
+    width: 30px; /* Larghezza del cerchio */
+    height: 30px; /* Altezza del cerchio */
+    border-radius: 50%; /* Cerchio rotondo */
+    transition: all 0.2s ease-in-out; /* Transizione morbida */
+}
+
+.remove-movie-btn:hover {
+    background: rgb(215, 210, 210);
+    color: white;
+    transform: scale(0.8); /* Riduce il cerchio quando si passa sopra */
+}
