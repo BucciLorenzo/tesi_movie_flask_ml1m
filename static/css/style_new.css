@@ -380,3 +380,210 @@ footer {
     color: white;
     transform: scale(0.8); /* Riduce il cerchio quando si passa sopra */
 }
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media only screen and (max-width: 600px) {
+    /* Esempio: ridurre il font sui dispositivi mobili */
+    body {
+        font-size: 14px;
+    }
+}
+
+/* Base Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Impedisce lo scorrimento orizzontale */
+}
+
+/* Contenitore principale */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 280px; /* Colonna sinistra flessibile, destra fissa */
+    grid-gap: 20px;
+    max-width: 100%; /* Impostiamo una larghezza massima di 100% */
+    width: 100%;
+    box-sizing: border-box;
+    margin: 20px auto; /* Centra il contenitore con margini uguali */
+    padding: 20px;
+}
+
+/* Search Container - adattato per dispositivi mobili */
+.search-container {
+    flex: 1 1 100%; /* Flessibile, occuperà tutta la larghezza disponibile */
+    padding: 10px; /* Riduci il padding per evitare overflow */
+    background-color: #fff;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden; /* Evita overflow */
+}
+
+/* Gestione per il pulsante "Valuta Lista 1" */
+.evaluate-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1e88e5;
+    color: white;
+}
+
+/* Main Content */
+main {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 5px 20px;
+    margin: 0 5px;
+    padding-bottom: 60px; /* Spazio per il footer fisso */
+    box-sizing: border-box;
+}
+
+/* Footer Fisso */
+footer {
+    position: fixed; /* Posizione fissa */
+    bottom: 0;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #1e88e5;
+    color: white;
+    text-align: center;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+/* Search Container - Su dispositivi mobili */
+@media (max-width: 768px) {
+    .search-container {
+        width: 100%; /* Assicurati che prenda tutta la larghezza disponibile */
+        max-width: 100%; /* Impedisce che venga ridotto oltre il 100% */
+        padding: 10px;
+        box-sizing: border-box;
+        overflow-x: auto; /* Aggiunge uno scroll orizzontale se il contenuto è largo */
+        white-space: nowrap; /* Impedisce che il contenuto vada a capo */
+    }
+
+    /* Aggiungi uno scroll orizzontale al search container */
+    .search-container input[type="text"] {
+        width: 100%; /* Si assicura che il campo di ricerca non esca dal contenitore */
+        box-sizing: border-box;
+    }
+
+    /* Gestire il pulsante "Valuta Lista 1" */
+    .evaluate-btn {
+        font-size: 14px;
+        padding: 10px 15px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        width: 100%; /* Assicura che il pulsante non vada oltre la larghezza */
+    }
+
+    /* Risultati della ricerca */
+    #search-results {
+        max-height: 150px;
+        overflow-y: auto; /* Scroll verticale per risultati della ricerca */
+        max-width: 100%; /* Assicurati che i risultati non escano dal contenitore */
+    }
+}
+
+/* Footer non fisso su schermi più piccoli */
+@media (max-width: 768px) {
+    footer {
+        position: static; /* Rimuovi la posizione fissa sui dispositivi mobili */
+        padding: 10px;
+    }
+}
+
+/* Recommendations Sections - Su dispositivi mobili */
+@media (max-width: 768px) {
+    /* Impostare una larghezza massima per ciascun elemento all'interno delle recommendation sections */
+    #recommendations-1-section,
+    #recommendations-2-section,
+    #recommendations-3-section,
+    #recommendations-4-section,
+    #recommendations-5-section,
+    #recommendations-6-section,
+    #recommendations-7-section {
+        width: 100%; /* Assicurati che il contenitore prenda tutta la larghezza disponibile */
+        overflow: hidden; /* Evita lo scroll orizzontale */
+        padding: 10px; /* Aggiungi un po' di padding per lo spazio interno */
+        box-sizing: border-box; /* Includi il padding e il bordo nel calcolo della larghezza */
+    }
+
+    /* All'interno delle sections, le liste saranno disposte orizzontalmente */
+    #recommendations-1-section ul,
+    #recommendations-2-section ul,
+    #recommendations-3-section ul,
+    #recommendations-4-section ul,
+    #recommendations-5-section ul,
+    #recommendations-6-section ul,
+    #recommendations-7-section ul {
+        display: flex; /* Disposizione orizzontale degli elementi */
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+        flex-wrap: wrap; /* Permette agli elementi di andare a capo se necessario */
+    }
+
+    /* Gli elementi della lista saranno più piccoli per adattarsi meglio */
+    #recommendations-1-section li,
+    #recommendations-2-section li,
+    #recommendations-3-section li,
+    #recommendations-4-section li,
+    #recommendations-5-section li,
+    #recommendations-6-section li,
+    #recommendations-7-section li {
+        flex: 0 0 45%; /* Occupa il 45% della larghezza, rimpicciolisce gli elementi */
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        border: 1px solid transparent; /* Bordo trasparente */
+        transition: background-color 0.3s ease;
+        box-sizing: border-box; /* Include padding e bordo nel calcolo della larghezza */
+    }
+
+    /* Hover effect */
+    #recommendations-1-section li:hover,
+    #recommendations-2-section li:hover,
+    #recommendations-3-section li:hover,
+    #recommendations-4-section li:hover,
+    #recommendations-5-section li:hover,
+    #recommendations-6-section li:hover,
+    #recommendations-7-section li:hover {
+        background-color: rgba(224, 224, 224, 0.5); /* Leggera modifica allo sfondo */
+    }
+
+    /* Modifica l'immagine all'interno di ciascun elemento per essere più piccola */
+    #recommendations-1-section li img,
+    #recommendations-2-section li img,
+    #recommendations-3-section li img,
+    #recommendations-4-section li img,
+    #recommendations-5-section li img,
+    #recommendations-6-section li img,
+    #recommendations-7-section li img {
+        max-width: 80%; /* Rende l'immagine più piccola per adattarsi meglio */
+        height: auto;
+    }
+}
+
+

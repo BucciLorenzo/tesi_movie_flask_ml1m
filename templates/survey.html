@@ -2,10 +2,10 @@
 
 {% block content %}
 
-<div style="flex: 1; padding: 20px; margin-left: 10px" class="div_search">
-    <h2>Survey on Recommender System</h2>
-    <p>Please take a moment to complete this survey about the recommender system. Your feedback is valuable in improving our service.</p>
-    <p>For each statement, select the option that best represents your opinion:</p>
+<div style="flex: 1; padding: 10px; margin-left: 5px; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; height: 100%; overflow-y: auto; overflow-x: hidden;" class="div_search">
+    <h2 style="text-align: center; font-size: 18px;">Survey on Recommender System</h2>
+    <p style="text-align: center; font-size: 16px;">Please take a moment to complete this survey about the recommender system. Your feedback is valuable in improving our service.</p>
+    <p style="text-align: center; font-size: 16px;">For each statement, select the option that best represents your opinion:</p>
     <ul>
         <li><strong>Strongly Disagree</strong> (1)</li>
         <li><strong>Disagree</strong> (2)</li>
@@ -13,133 +13,57 @@
         <li><strong>Agree</strong> (4)</li>
         <li><strong>Strongly Agree</strong> (5)</li>
     </ul>
-    
-    <form action="/submit" method="post" class="survey-form">
-        <table class="survey-table">
-            <tr>
-                <th>Question</th>
-                <th>Strongly Disagree</th>
-                <th>Disagree</th>
-                <th>Neutral</th>
-                <th>Agree</th>
-                <th>Strongly Agree</th>
-            </tr>
-            <tr>
-                <td>The items recommended to me matched my interests</td>
-                <td><input type="radio" name="q1" value="1" required></td>
-                <td><input type="radio" name="q1" value="2"></td>
-                <td><input type="radio" name="q1" value="3"></td>
-                <td><input type="radio" name="q1" value="4"></td>
-                <td><input type="radio" name="q1" value="5"></td>
-            </tr>
-            <tr>
-                <td>The recommender system helped me discover new products.</td>
-                <td><input type="radio" name="q2" value="1" required></td>
-                <td><input type="radio" name="q2" value="2"></td>
-                <td><input type="radio" name="q2" value="3"></td>
-                <td><input type="radio" name="q2" value="4"></td>
-                <td><input type="radio" name="q2" value="5"></td>
-            </tr>
-            <tr>
-                <td>The items recommended to me are diverse</td>
-                <td><input type="radio" name="q3" value="1" required></td>
-                <td><input type="radio" name="q3" value="2"></td>
-                <td><input type="radio" name="q3" value="3"></td>
-                <td><input type="radio" name="q3" value="4"></td>
-                <td><input type="radio" name="q3" value="5"></td>
-            </tr>
-            <tr>
-                <td>The information provided for the recommended items is sufficient for me to make a purchase/download decision.</td>
-                <td><input type="radio" name="q4" value="1" required></td>
-                <td><input type="radio" name="q4" value="2"></td>
-                <td><input type="radio" name="q4" value="3"></td>
-                <td><input type="radio" name="q4" value="4"></td>
-                <td><input type="radio" name="q4" value="5"></td>
-            </tr>
-            <tr>
-                <td>I found it easy to tell the system what I like/dislike.</td>
-                <td><input type="radio" name="q5" value="1" required></td>
-                <td><input type="radio" name="q5" value="2"></td>
-                <td><input type="radio" name="q5" value="3"></td>
-                <td><input type="radio" name="q5" value="4"></td>
-                <td><input type="radio" name="q5" value="5"></td>
-            </tr>
-            <tr>
-                <td>I became familiar with the recommender system very quickly.</td>
-                <td><input type="radio" name="q6" value="1" required></td>
-                <td><input type="radio" name="q6" value="2"></td>
-                <td><input type="radio" name="q6" value="3"></td>
-                <td><input type="radio" name="q6" value="4"></td>
-                <td><input type="radio" name="q6" value="5"></td>
-            </tr>
-            <tr>
-                <td>I feel in control of modifying my taste profile.</td>
-                <td><input type="radio" name="q7" value="1" required></td>
-                <td><input type="radio" name="q7" value="2"></td>
-                <td><input type="radio" name="q7" value="3"></td>
-                <td><input type="radio" name="q7" value="4"></td>
-                <td><input type="radio" name="q7" value="5"></td>
-            </tr>
-            <tr>
-                <td>I understood why the items were recommended to me.</td>
-                <td><input type="radio" name="q8" value="1" required></td>
-                <td><input type="radio" name="q8" value="2"></td>
-                <td><input type="radio" name="q8" value="3"></td>
-                <td><input type="radio" name="q8" value="4"></td>
-                <td><input type="radio" name="q8" value="5"></td>
-            </tr>
-            <tr>
-                <td>The recommender gave me good suggestions.</td>
-                <td><input type="radio" name="q9" value="1" required></td>
-                <td><input type="radio" name="q9" value="2"></td>
-                <td><input type="radio" name="q9" value="3"></td>
-                <td><input type="radio" name="q9" value="4"></td>
-                <td><input type="radio" name="q9" value="5"></td>
-            </tr>
-            <tr>
-                <td>Overall, I am satisfied with the recommender.</td>
-                <td><input type="radio" name="q10" value="1" required></td>
-                <td><input type="radio" name="q10" value="2"></td>
-                <td><input type="radio" name="q10" value="3"></td>
-                <td><input type="radio" name="q10" value="4"></td>
-                <td><input type="radio" name="q10" value="5"></td>
-            </tr>
-            <tr>
-                <td>I am confident I will like the items recommended to me</td>
-                <td><input type="radio" name="q11" value="1" required></td>
-                <td><input type="radio" name="q11" value="2"></td>
-                <td><input type="radio" name="q11" value="3"></td>
-                <td><input type="radio" name="q11" value="4"></td>
-                <td><input type="radio" name="q11" value="5"></td>
-            </tr>
-            <tr>
-                <td>The recommender made me more confident about my selection/decision.</td>
-                <td><input type="radio" name="q12" value="1" required></td>
-                <td><input type="radio" name="q12" value="2"></td>
-                <td><input type="radio" name="q12" value="3"></td>
-                <td><input type="radio" name="q12" value="4"></td>
-                <td><input type="radio" name="q12" value="5"></td>
-            </tr>
-            <tr>
-                <td>I will use this recommender again</td>
-                <td><input type="radio" name="q13" value="1" required></td>
-                <td><input type="radio" name="q13" value="2"></td>
-                <td><input type="radio" name="q13" value="3"></td>
-                <td><input type="radio" name="q13" value="4"></td>
-                <td><input type="radio" name="q13" value="5"></td>
-            </tr>
-            <tr>
-                <td>I would buy the items recommended, given the opportunity.</td>
-                <td><input type="radio" name="q14" value="1" required></td>
-                <td><input type="radio" name="q14" value="2"></td>
-                <td><input type="radio" name="q14" value="3"></td>
-                <td><input type="radio" name="q14" value="4"></td>
-                <td><input type="radio" name="q14" value="5"></td>
-            </tr>            
-        </table>
-        <br>
-        <button type="submit" class="survey-button">Submit</button>
+
+    <!-- Form che invia i dati -->
+    <form action="/submit" method="post">
+        {% for question in [
+            "The items recommended to me matched my interests",
+            "The recommender system helped me discover new products.",
+            "The items recommended to me are diverse",
+            "The information provided for the recommended items is sufficient for me to make a purchase/download decision.",
+            "I found it easy to tell the system what I like/dislike.",
+            "I became familiar with the recommender system very quickly.",
+            "I feel in control of modifying my taste profile.",
+            "I understood why the items were recommended to me.",
+            "The recommender gave me good suggestions.",
+            "Overall, I am satisfied with the recommender.",
+            "I am confident I will like the items recommended to me",
+            "The recommender made me more confident about my selection/decision.",
+            "I will use this recommender again",
+            "I would buy the items recommended, given the opportunity."
+        ] %}
+        
+            <p style="font-size: 16px; margin-bottom: 6px; text-align: left;"><strong>{{ question }}</strong></p>
+            
+            <!-- Radio buttons disposti verticalmente con numeri sotto -->
+            <div style="display: flex; justify-content: flex-start; gap: 30px;">
+                <label style="display: block; font-size: 14px; text-align: center;">
+                    <input type="radio" name="q{{ loop.index }}" value="1" required style="transform: scale(1.5);">
+                    <span style="display: block;">1</span>
+                </label>
+                <label style="display: block; font-size: 14px; text-align: center;">
+                    <input type="radio" name="q{{ loop.index }}" value="2" style="transform: scale(1.5);">
+                    <span style="display: block;">2</span>
+                </label>
+                <label style="display: block; font-size: 14px; text-align: center;">
+                    <input type="radio" name="q{{ loop.index }}" value="3" style="transform: scale(1.5);">
+                    <span style="display: block;">3</span>
+                </label>
+                <label style="display: block; font-size: 14px; text-align: center;">
+                    <input type="radio" name="q{{ loop.index }}" value="4" style="transform: scale(1.5);">
+                    <span style="display: block;">4</span>
+                </label>
+                <label style="display: block; font-size: 14px; text-align: center;">
+                    <input type="radio" name="q{{ loop.index }}" value="5" style="transform: scale(1.5);">
+                    <span style="display: block;">5</span>
+                </label>
+            </div>
+
+        {% endfor %}
+
+        <button type="submit" class="survey-button" style="padding: 10px 20px; font-size: 18px; margin-top: 20px; margin-left: 5px;">Submit</button>
     </form>
+
 </div>
 
 {% endblock %}

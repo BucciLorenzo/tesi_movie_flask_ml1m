@@ -1,49 +1,110 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
 
-<div style="flex: 1; padding: 20px; margin-left: 10px" class="div_search">
-    <h2>User Information Form</h2>
-    <p>Please fill out the following information before proceeding with the survey.</p>
-    
-    <form action="/submit_info" method="post" class="info-form">
+    .header {
+        width: 100%;
+        background-color: #287bff;
+        color: white;
+        padding: 15px 0;  /* Aggiustato il padding per rimuovere gli spazi laterali */
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;  /* Centrato il testo */
+    }
+
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+        text-align: left;  /* Allinea il testo a sinistra */
+        margin-left: 0;    /* Rimuove il margine a sinistra */
+    }
+
+    select, button {
+        width: 70%;  /* Ridotto al 70% della larghezza */
+        max-width: 300px; /* Limite massimo di larghezza */
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        display: block;
+        margin-left: 0;   /* Allinea a sinistra */
+        margin-right: 0;  /* Rimuove margine destro */
+    }
+
+    button {
+        background-color: #287bff;
+        color: white;
+        border: none;
+        margin-top: 20px;
+        font-size: 16px;
+    }
+</style>
+
+<div class="header">
+    Where&Why
+</div>
+
+<div class="container">
+    <p>First of all, we need some information about you.</p>
+    <form action="/submit_info" method="post">
         <label for="age">Age:</label>
-        <input type="number" id="age" name="age" min="1" max="120" required>
-        <br><br>
+        <select id="age" name="age" required>
+            <option value="<18">&lt;18</option>
+            <option value="18-25">18-25</option>
+            <option value="26-35">26-35</option>
+            <option value="36-50">36-50</option>
+            <option value=">50">&gt;50</option>
+        </select>
 
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" required>
-            <option value="">Select...</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="non-binary">Non-binary</option>
             <option value="prefer-not-to-say">Prefer not to say</option>
         </select>
-        <br><br>
 
         <label for="education">Highest Level of Education:</label>
         <select id="education" name="education" required>
-            <option value="">Select...</option>
-            <option value="high-school">High School</option>
+            <option value="high-school">High School Diploma</option>
             <option value="bachelor">Bachelor's Degree</option>
             <option value="master">Master's Degree</option>
             <option value="phd">PhD</option>
             <option value="other">Other</option>
         </select>
-        <br><br>
 
-        <label for="recommender-knowledge">Familiarity with Recommender Systems:</label>
-        <select id="recommender-knowledge" name="recommender-knowledge" required>
-            <option value="">Select...</option>
+        <label for="recommender">Familiarity with Recommender Systems (such as Amazon, YouTube, Netflix):</label>
+        <select id="recommender" name="recommender" required>
             <option value="none">None</option>
             <option value="basic">Basic</option>
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
         </select>
-        <br><br>
-        
-        <button type="submitinfo" class="info-button">Submit</button>
+
+        <button type="submit">Continue</button>
     </form>
 </div>
-
 {% endblock %}

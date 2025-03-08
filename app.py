@@ -515,7 +515,7 @@ def submit():
 def evaluate():
     data = request.json
     algorithm_name = data.get('algorithm_name')
-    timestamp = int(time.time() * 1000)  # Millisecondi
+    timestamp = session['timestamp']
 
     # Ottiene i film degli utenti dalla sessione
     user_movies = session['user_profile'].get('movies', [])
@@ -619,34 +619,7 @@ def before_request():
 
 ## DEFINIZIONE DEL LOG #####
 # Directory per i file di log
-LOG_DIR = 'logs_user_info'
-os.makedirs(LOG_DIR, exist_ok=True)  # Crea la directory
-
-def setup_logging(session_id):  
-    log_filename = os.path.join(LOG_DIR, f"{session_id}.log")
-    logger = logging.getLogger(session_id)
-    
-    if not logger.hasHandlers():
-        logger.setLevel(logging.INFO)
-        
-        # Usa il FileHandler standard per il log
-        file_handler = logging.FileHandler(log_filename)
-        
-        # Definisce il formato del log (senza newline finale)
-        formatter = logging.Formatter('%(message)s', datefmt='%Y-%m-%d %H:%M:%S,%f')
-        file_handler.setFormatter(formatter)
-        
-        logger.addHandler(file_handler)
-        
-    return logger
-
-
 # Inizializza il logger per ogni sessione
-@app.before_request
-def init_session_logger():
-    if 'session_id' not in session:
-        session['session_id'] = datetime.now().strftime('%Y%m%d%H%M%S%f')
-    session['logger'] = setup_logging(session['session_id'])
 
 @app.route('/')
 def user_info():
@@ -654,25 +627,28 @@ def user_info():
 
 @app.route('/submit_info', methods=['POST'])
 def submit_info():
+
+    # Azzera il timestamp se esiste già
+    session.pop("timestamp", None)
+
     # Prendere i dati dal form
     age = request.form.get('age')
     gender = request.form.get('gender')
     education = request.form.get('education')
     recommender_knowledge = request.form.get('recommender-knowledge')
 
-    # Registra le informazioni nel log
-    logger = session.get('logger')
-    if logger:
-        logger.info(f"{age}###{gender}###{education}###{recommender_knowledge}")
-    
-    
-    bprint_yellow(f"Age: {age}, Gender: {gender}, Education: {education}, Knowledge: {recommender_knowledge}")
+    # Memorizziamo il timestamp
+    session['timestamp'] = int(time.time() * 1000)  # Millisecondi
 
-    # Reindirizza a home.html
-    return render_template('home.html', age=age, gender=gender, education=education, recommender_knowledge=recommender_knowledge)
+    timestamp = session['timestamp']  # Recuperiamo il timestamp per usarlo
 
+    bprint_yellow(f"Timestamp: {timestamp}, Age: {age}, Gender: {gender}, Education: {education}, Knowledge: {recommender_knowledge}")
+
+    # Reindirizza a home.html passando il timestamp
+    return render_template('home.html', age=age, gender=gender, education=education, recommender_knowledge=recommender_knowledge, timestamp=timestamp)
 
 ###############################################
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
