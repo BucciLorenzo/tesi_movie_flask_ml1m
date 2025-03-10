@@ -24,7 +24,28 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # For session encryption
 # Configure Flask-Session to use server-side session storage
 from flask_session import Session
 app.config['SESSION_TYPE'] = 'filesystem'  # Use filesystem for storing session data
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_FILE_DIR'] = 'flask_sessions'  # Cartella per le sessioni
+app.config['SESSION_FILE_THRESHOLD'] = 100  # Numero massimo di sessioni salvate
 Session(app)
+
+@app.before_request
+def ensure_unique_session():
+    if 'session_id' not in session:
+        session['session_id'] = str(uuid.uuid4())  # Genera un nuovo ID univoco
+        session.modified = True
+
+    # Assegna il logger alla sessione ogni volta
+    session['logger'] = setup_logging(session['session_id'])
+
+
+@app.route('/reset_session')
+def reset_session():
+    session.clear()
+    session['session_id'] = str(uuid.uuid4())  # Nuovo ID
+    return "Sessione resettata!"
+
 
 @app.route('/survey')
 def survey():
@@ -430,29 +451,36 @@ os.makedirs(LOG_DIR, exist_ok=True)  # Crea la directory
 
 class CustomFileHandler(logging.FileHandler):
     def emit(self, record):
-        # Evita l'aggiunta di \n alla fine del messaggio
-        msg = self.format(record)
-        self.stream.write(msg)  # Scrive il messaggio senza \n finale
-        self.flush()  # Forza la scrittura immediata
+        """Scrive il messaggio senza newline aggiuntivo."""
+        try:
+            msg = self.format(record)
+            self.stream.write(msg)  # Scrive senza \n
+            self.flush()  # Forza la scrittura immediata
+        except Exception:
+            self.handleError(record)  # Gestisce eventuali errori
 
 def setup_logging(session_id):  
     log_filename = os.path.join(LOG_DIR, f"{session_id}.log")
-    logger = logging.getLogger(session_id)
-    
-    if not logger.hasHandlers():
-        logger.setLevel(logging.INFO)
-        
-        # Crea il CustomFileHandler
-        file_handler = CustomFileHandler(log_filename)
-        
-        # Definisce il formato del log (senza newline finale)
-        formatter = logging.Formatter('%(message)s', datefmt='%Y-%m-%d %H:%M:%S,%f')
-        file_handler.setFormatter(formatter)
-        
-        logger.addHandler(file_handler)
-        
-    return logger
 
+    if not os.path.exists(log_filename):
+        open(log_filename, 'w').close()
+
+    logger = logging.getLogger(session_id)
+
+    # Rimuove eventuali vecchi handler per evitare duplicati
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    logger.setLevel(logging.INFO)
+    
+    # Usa il CustomFileHandler invece di FileHandler normale
+    file_handler = CustomFileHandler(log_filename)
+    formatter = logging.Formatter('%(message)s')  # Nessun datefmt necessario
+    file_handler.setFormatter(formatter)
+    
+    logger.addHandler(file_handler)
+
+    return logger
 
 # Inizializza il logger per ogni sessione
 @app.before_request
@@ -490,11 +518,7 @@ def submit():
     # Recupera le risposte salvate in sessione
     user_responses = session.get('user_responses', [])
 
-    # Ottieni il logger per la sessione corrente
-    session_id = session.get('session_id')
-    logger = setup_logging(session_id)
-
-    timestamp = int(time.time() * 1000)  # Millisecondi
+    logger = session['logger']
     log_message = "###" + ";;;".join(map(str, user_responses))
 
     logger.info(log_message)
@@ -545,9 +569,14 @@ def evaluate():
     if algorithm_name in titles_map:
         selected_titles = titles_map[algorithm_name]
 
+    #age = session.get('age', 'N/A')
+    #user_info = session.get('user_info', 'N/A')
+
     # Logga le informazioni
     logger = session['logger']
-    logger.info(f"{timestamp}###{algorithm_name}###{';;;'.join(map(str, movie_ids))}###{';;;'.join(selected_titles)}")
+    #logger.info(f"{timestamp}###{algorithm_name}###{user_info}###{';;;'.join(map(str, movie_ids))}###{';;;'.join(selected_titles)}")
+    #logger.info(f"{timestamp}###" + "###".join(str(value) for value in session['user_info'].values()))
+    logger.info(f"{timestamp}###{algorithm_name}###" +  "###" + ";;;".join(map(str, movie_ids)) + "###" + ";;;".join(selected_titles) + "###" + "###".join(str(value) for value in session['user_info'].values()) )
 
     return jsonify({'status': 'success', 'message': 'Logged evaluation!'})
 
@@ -635,10 +664,24 @@ def submit_info():
     age = request.form.get('age')
     gender = request.form.get('gender')
     education = request.form.get('education')
-    recommender_knowledge = request.form.get('recommender-knowledge')
+    recommender_knowledge = request.form.get('recommender')
 
     # Memorizziamo il timestamp
     session['timestamp'] = int(time.time() * 1000)  # Millisecondi
+    
+    # Creare una stringa unica con i valori
+    #session_data = f"{age}###{gender}###{education}###{recommender_knowledge}"
+    #session['user_info'] = session_data
+
+    # Usa un dizionario invece di una stringa concatenata
+    session['user_info'] = {
+        'age': age,
+        'gender': gender,
+        'education': education,
+        'recommender_knowledge': recommender_knowledge
+    }
+
+    session.modified = True
 
     timestamp = session['timestamp']  # Recuperiamo il timestamp per usarlo
 
