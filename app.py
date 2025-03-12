@@ -26,8 +26,8 @@ from flask_session import Session
 app.config['SESSION_TYPE'] = 'filesystem'  # Use filesystem for storing session data
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_FILE_DIR'] = 'flask_sessions'  # Cartella per le sessioni
-app.config['SESSION_FILE_THRESHOLD'] = 100  # Numero massimo di sessioni salvate
+#app.config['SESSION_FILE_DIR'] = 'flask_sessions'  # Cartella per le sessioni
+#app.config['SESSION_FILE_THRESHOLD'] = 100  # Numero massimo di sessioni salvate
 Session(app)
 
 @app.before_request
@@ -460,7 +460,8 @@ class CustomFileHandler(logging.FileHandler):
             self.handleError(record)  # Gestisce eventuali errori
 
 def setup_logging(session_id):  
-    log_filename = os.path.join(LOG_DIR, f"{session_id}.log")
+    short_session_id = session_id[:8]
+    log_filename = os.path.join(LOG_DIR, f"{short_session_id}.log")
 
     if not os.path.exists(log_filename):
         open(log_filename, 'w').close()
@@ -496,7 +497,7 @@ responses = []
 
 @app.route('/')
 def index():
-    return render_template('survey.html')
+    return render_template('survey.html')  # Nessuna modifica qui
 
 #Endpoint per i dati del sondaggio
 @app.route('/submit', methods=['POST'])

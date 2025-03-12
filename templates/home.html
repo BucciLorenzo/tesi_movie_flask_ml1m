@@ -6544,8 +6544,6 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
         sections[index].appendChild(createRecommendationList(recommendation.data, `Lista ${index + 1} : ${recommendation.title}`));
         
         
-        
-
       });
 
       }
@@ -6554,10 +6552,17 @@ document.getElementById('get-recommendation-btn').addEventListener('click', func
       });
 
       
-      const evaluateButtons = document.querySelectorAll('[id^="evaluate-btn-"]');
+// Seleziona tutti i pulsanti di valutazione
+const evaluateButtons = document.querySelectorAll('[id^="evaluate-btn-"]');
+
 evaluateButtons.forEach((button, index) => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(event) {
+        event.preventDefault(); // Evita il comportamento predefinito del link
+
+        // Ottieni il nome dell'algoritmo associato al pulsante
         const algorithmName = recommendationTitles[index];
+
+        // Invia la valutazione al server tramite POST
         fetch('/evaluate', {
             method: 'POST',
             headers: {
@@ -6568,8 +6573,29 @@ evaluateButtons.forEach((button, index) => {
         .then(response => response.json())
         .then(data => console.log('Evaluation logged:', data))
         .catch(error => console.error('Error logging evaluation:', error));
+
+        // Ottieni l'ID della sezione corrispondente al pulsante
+        const sectionId = `recommendations-${index + 1}-section`;
+        const section = document.getElementById(sectionId);
+
+        // Raccogli tutte le raccomandazioni (film) dalla sezione cliccata
+        const recommendationItems = section.querySelectorAll('li'); // Supponiamo che ogni raccomandazione sia in <li>
+
+        // Crea un array per raccogliere i dati delle raccomandazioni
+        const recommendationsData = Array.from(recommendationItems).map(item => item.textContent.trim());
+
+        // Crea l'URL per la pagina survey.html con i dati della raccomandazione
+        const surveyUrl = new URL('/survey', window.location.origin); // Costruisce l'URL base della pagina del sondaggio
+
+        // Aggiungi i dati alla query string
+        surveyUrl.searchParams.append('algorithm_name', encodeURIComponent(`Lista ${index + 1}`));
+        surveyUrl.searchParams.append('recommendations', encodeURIComponent(JSON.stringify(recommendationsData)));
+
+        // Apri il sondaggio in una nuova scheda con i dati
+        window.open(surveyUrl.toString(), '_blank');
     });
 });
+
 
 
 //Visualizza uno alla volta le sezioni recommender e i relativi button
